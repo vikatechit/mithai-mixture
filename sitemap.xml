@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://mithaimixture.com/index.html</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/categories.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/shop.html</loc><priority>0.9</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://mithaimixture.com/sweets.html</loc><priority>0.9</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://mithaimixture.com/biscuits.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/beverages.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/mixtures.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/pickles.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/chocolates.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/frozen-foods.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/rates.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/about.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://mithaimixture.com/contact.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://mithaimixture.com/order.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://mithaimixture.com/privacy.html</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://mithaimixture.com/terms.html</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://mithaimixture.com/shipping.html</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://mithaimixture.com/refunds.html</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+</urlset>

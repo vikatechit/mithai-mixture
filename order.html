@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5a0710">
+  <title>Order Checkout | Mithai Mixture India Private Limited</title>
+  <meta name="description" content="Review your order items, select quantities, and confirm your Mithai Mixture order directly through WhatsApp with Order ID tracking.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/webp" href="assets/logo.webp">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    TASTE WITH TRADITION &nbsp;•&nbsp; PREMIUM SWEETS • SNACKS • HAPPINESS &nbsp;•&nbsp; 
+    <b>WHATSAPP ORDERS: <a href="https://wa.me/918125213332?text=Hello%20Mithai%20Mixture%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank">+91 81252 13332</a></b>
+  </div>
+
+  <!-- Main Navigation -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-wrapper" aria-label="Mithai Mixture Home">
+        <img class="brand-logo" src="assets/logo.webp" alt="Mithai Mixture Logo">
+        <div class="brand-text">
+          <strong>Mithai Mixture</strong>
+          <span>SWEETS • SNACKS • HAPPINESS</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="categories.html">CATEGORIES</a>
+        <a href="shop.html">SHOP ALL</a>
+        <a href="sweets.html">SWEETS</a>
+        <a href="rates.html">RATE LIST</a>
+        <a href="about.html">OUR STORY</a>
+        <a href="contact.html">CONTACT</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-cart-nav" onclick="Cart.open()" aria-label="Open Cart">
+          <span>YOUR ORDER</span>
+          <span class="badge-count" data-count>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-kicker">FINAL STEP</span>
+        <h2>Review &amp; Place Your Order</h2>
+        <p>Confirm the items and portions in your cart, enter your delivery information, and submit. Your order will be logged and instantly sent to our WhatsApp order desk.</p>
+      </div>
+
+      <div class="checkout-card">
+        <h3 style="font-family: var(--font-serif); font-size: 22px; color: var(--maroon); margin: 0 0 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px;">
+          1. Selected Items
+        </h3>
+
+        <!-- Order Items Review Container -->
+        <div id="orderReviewItems" style="margin-bottom: 24px;">
+          <!-- Populated dynamically by cart.js -->
+        </div>
+
+        <div style="background: var(--cream-soft); padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid var(--line); margin-bottom: 28px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 800; color: var(--maroon);">
+            <span>Estimated Total:</span>
+            <span id="orderReviewTotal">₹0</span>
+          </div>
+          <div style="font-size: 11px; color: #7f632d; margin-top: 6px; line-height: 1.5;">
+            * Items with unlisted rates (“Price on request”) will have their exact amount, packaging and delivery fees confirmed by the Mithai Mixture team on WhatsApp.
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-serif); font-size: 22px; color: var(--maroon); margin: 0 0 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px;">
+          2. Delivery &amp; Contact Details
+        </h3>
+
+        <form onsubmit="App.handleCheckout(event)">
+          <div class="form-group">
+            <label for="checkoutName">Customer Full Name *</label>
+            <input type="text" id="checkoutName" required placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutPhone">WhatsApp / Mobile Number *</label>
+            <input type="tel" id="checkoutPhone" required inputmode="tel" placeholder="10-digit mobile number">
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutAddress">Delivery Address *</label>
+            <textarea id="checkoutAddress" required placeholder="Flat / House No., Street, Landmark, City &amp; PIN code"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutNotes">Special Instructions / Packaging Request (Optional)</label>
+            <input type="text" id="checkoutNotes" placeholder="e.g. Gift wrapping, specific delivery date/time">
+          </div>
+
+          <button type="submit" id="btnSubmitOrder" class="btn btn-whatsapp btn-block" style="padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-top: 14px;">
+            SAVE ORDER &amp; OPEN WHATSAPP (+91 81252 13332) →
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 18px;">
+          <a href="shop.html" style="font-size: 11px; font-weight: 700; color: var(--maroon); text-decoration: underline;">← Continue Shopping</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img class="footer-logo" src="assets/logo.webp" alt="Mithai Mixture Logo">
+      <h3>Mithai Mixture India Private Limited</h3>
+      <div class="footer-tagline">“Taste with Tradition” • Sweets • Snacks • Happiness</div>
+      <p style="font-size: 12px; margin: 4px 0;">Official WhatsApp Orders: <b>+91 81252 13332</b></p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="categories.html">Categories</a>
+        <a href="shop.html">Shop All</a>
+        <a href="sweets.html">Sweets</a>
+        <a href="rates.html">Rate List</a>
+        <a href="about.html">Our Story</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="shipping.html">Shipping Policy</a>
+        <a href="refunds.html">Refund Policy</a>
+      </div>
+      <div class="footer-legal">
+        © <span id="currentYear"></span> Mithai Mixture India Private Limited. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp CTA -->
+  <a href="https://wa.me/918125213332?text=Hello%20Mithai%20Mixture%20Team%2C%20I%20need%20help%20with%20checkout." class="floating-whatsapp" target="_blank" aria-label="Chat on WhatsApp">💬</a>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">⌂</span><span>Home</span></a>
+    <a href="categories.html"><span class="nav-icon">◈</span><span>Categories</span></a>
+    <a href="shop.html"><span class="nav-icon">▦</span><span>Shop</span></a>
+    <a href="rates.html"><span class="nav-icon">₹</span><span>Rate List</span></a>
+    <a href="order.html" class="active"><span class="nav-icon">🛒</span><span>Order</span></a>
+  </nav>
+
+  <!-- Cart Drawer -->
+  <div class="cart-overlay" id="cartOverlay">
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping Cart">
+      <div class="drawer-head">
+        <h3>YOUR ORDER</h3>
+        <button type="button" class="btn-drawer-close" onclick="Cart.close()">×</button>
+      </div>
+      <div class="drawer-status-bar" id="sheetStatusBadge">
+        <span class="status-dot dot-local"></span> Initializing catalogue…
+      </div>
+      <div class="drawer-body" id="cartDrawerItems"></div>
+      <div class="drawer-foot">
+        <div class="drawer-total-row">
+          <span>Estimated Total:</span>
+          <span id="cartDrawerTotal">₹0</span>
+        </div>
+        <div class="drawer-note" id="cartDrawerNote" style="display:none;">
+          Items marked “Price on request” will be confirmed by our team.
+        </div>
+        <a href="order.html" class="btn btn-gold btn-block" onclick="Cart.close()">PROCEED TO CHECKOUT →</a>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      Cart.render();
+    });
+  </script>
+</body>
+</html>

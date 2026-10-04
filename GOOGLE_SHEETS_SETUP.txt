@@ -1,0 +1,34 @@
+MITHAI MIXTURE INDIA PRIVATE LIMITED — GOOGLE SHEETS BACKEND SETUP
+“Taste with Tradition” • WhatsApp: +91 81252 13332
+
+1. Create a new Google Sheet in Google Drive.
+2. Go to: Extensions -> Apps Script.
+3. Paste the contents of Code.gs from this website package into the editor.
+4. Click Save.
+5. In the function dropdown, select setup() and click Run (authorize Google access when prompted).
+   This will automatically generate the 6 tabs with proper columns:
+   - Products
+   - Orders
+   - Customers
+   - Enquiries
+   - Settings
+   - Categories
+   and seed the initial 66 products and exact sweet prices!
+6. Click Deploy -> New deployment.
+7. Select type: Web app.
+8. Settings:
+   - Execute as: Me (your Google account)
+   - Who has access: Anyone
+9. Click Deploy, authorize if prompted, and copy the Web App URL (ends in /exec).
+10. Open js/config.js in this project and paste your URL:
+    googleScriptUrl: "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec",
+11. That's it! All 19 pages will now automatically sync with your Google Sheet!
+    - Update a price in Google Sheets -> reflected live on the website.
+    - Change Available to NO in Google Sheets -> hidden from catalogue.
+    - Submit an order on the website -> logged into the Orders tab with an Order ID!
+    - Submit a contact enquiry -> logged into the Enquiries tab!
+
+If Google Sheets is ever offline or unconfigured:
+The website automatically falls back to the local catalogue and allows uninterrupted WhatsApp ordering.
+
+Deploy the complete folder directly to Vercel, Netlify, or GitHub Pages.

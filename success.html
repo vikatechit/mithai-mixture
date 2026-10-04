@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5a0710">
+  <title>Order Confirmed | Mithai Mixture India Private Limited</title>
+  <meta name="description" content="Thank you for choosing Mithai Mixture. Your order request has been submitted and sent to our WhatsApp order team.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/webp" href="assets/logo.webp">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    TASTE WITH TRADITION &nbsp;•&nbsp; PREMIUM SWEETS • SNACKS • HAPPINESS &nbsp;•&nbsp; 
+    <b>WHATSAPP ORDERS: <a href="https://wa.me/918125213332?text=Hello%20Mithai%20Mixture%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank">+91 81252 13332</a></b>
+  </div>
+
+  <!-- Main Navigation -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-wrapper" aria-label="Mithai Mixture Home">
+        <img class="brand-logo" src="assets/logo.webp" alt="Mithai Mixture Logo">
+        <div class="brand-text">
+          <strong>Mithai Mixture</strong>
+          <span>SWEETS • SNACKS • HAPPINESS</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="categories.html">CATEGORIES</a>
+        <a href="shop.html">SHOP ALL</a>
+        <a href="sweets.html">SWEETS</a>
+        <a href="rates.html">RATE LIST</a>
+        <a href="about.html">OUR STORY</a>
+        <a href="contact.html">CONTACT</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-cart-nav" onclick="Cart.open()" aria-label="Open Cart">
+          <span>YOUR ORDER</span>
+          <span class="badge-count" data-count>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="max-width: 760px;">
+      <div class="checkout-card" style="text-align: center; padding: 42px 28px;">
+        <div style="font-size: 56px; line-height: 1; margin-bottom: 16px;">🎉</div>
+        <span class="section-kicker" style="color: var(--green);">ORDER SUBMITTED SUCCESSFULLY</span>
+        <h2 style="font-family: var(--font-serif); font-size: 32px; color: var(--maroon); margin: 6px 0 12px;">Thank You for Choosing Mithai Mixture!</h2>
+        <p style="color: var(--muted); font-size: 14px; max-width: 580px; margin: 0 auto 24px;">
+          Your order has been recorded. Our team is now reviewing your items, portion weights, and delivery schedule.
+        </p>
+
+        <!-- Order Summary Card -->
+        <div id="successDetailsContainer" style="background: var(--cream-soft); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px; text-align: left; margin-bottom: 28px;">
+          <!-- Populated from sessionStorage by inline script -->
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 440px; margin: 0 auto;">
+          <a id="btnReopenWhatsApp" href="https://wa.me/918125213332" target="_blank" class="btn btn-whatsapp btn-block" style="padding: 15px; font-size: 13px;">
+            OPEN WHATSAPP ORDER CHAT (+91 81252 13332) →
+          </a>
+          <a href="shop.html" class="btn btn-outline-maroon btn-block" style="padding: 13px;">
+            ORDER MORE DELICACIES
+          </a>
+          <a href="index.html" style="font-size: 11px; font-weight: 700; color: var(--muted); margin-top: 6px;">Return to Homepage</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img class="footer-logo" src="assets/logo.webp" alt="Mithai Mixture Logo">
+      <h3>Mithai Mixture India Private Limited</h3>
+      <div class="footer-tagline">“Taste with Tradition” • Sweets • Snacks • Happiness</div>
+      <p style="font-size: 12px; margin: 4px 0;">Official WhatsApp Orders: <b>+91 81252 13332</b></p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="categories.html">Categories</a>
+        <a href="shop.html">Shop All</a>
+        <a href="sweets.html">Sweets</a>
+        <a href="rates.html">Rate List</a>
+        <a href="about.html">Our Story</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="shipping.html">Shipping Policy</a>
+        <a href="refunds.html">Refund Policy</a>
+      </div>
+      <div class="footer-legal">
+        © <span id="currentYear"></span> Mithai Mixture India Private Limited. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp CTA -->
+  <a href="https://wa.me/918125213332?text=Hello%20Mithai%20Mixture%20Team%2C%20checking%20on%20my%20order." class="floating-whatsapp" target="_blank" aria-label="Chat on WhatsApp">💬</a>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">⌂</span><span>Home</span></a>
+    <a href="categories.html"><span class="nav-icon">◈</span><span>Categories</span></a>
+    <a href="shop.html"><span class="nav-icon">▦</span><span>Shop</span></a>
+    <a href="rates.html"><span class="nav-icon">₹</span><span>Rate List</span></a>
+    <a href="javascript:void(0)" onclick="Cart.open()"><span class="nav-icon">🛒</span><span>Order</span></a>
+  </nav>
+
+  <!-- Cart Drawer -->
+  <div class="cart-overlay" id="cartOverlay">
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping Cart">
+      <div class="drawer-head">
+        <h3>YOUR ORDER</h3>
+        <button type="button" class="btn-drawer-close" onclick="Cart.close()">×</button>
+      </div>
+      <div class="drawer-status-bar" id="sheetStatusBadge">
+        <span class="status-dot dot-local"></span> Initializing catalogue…
+      </div>
+      <div class="drawer-body" id="cartDrawerItems"></div>
+      <div class="drawer-foot">
+        <div class="drawer-total-row">
+          <span>Estimated Total:</span>
+          <span id="cartDrawerTotal">₹0</span>
+        </div>
+        <div class="drawer-note" id="cartDrawerNote" style="display:none;">
+          Items marked “Price on request” will be confirmed by our team.
+        </div>
+        <a href="order.html" class="btn btn-gold btn-block" onclick="Cart.close()">PROCEED TO CHECKOUT →</a>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("successDetailsContainer");
+      const reopenBtn = document.getElementById("btnReopenWhatsApp");
+      const raw = sessionStorage.getItem("mm_last_order");
+
+      if (!raw) {
+        if (container) {
+          container.innerHTML = `
+            <div style="text-align: center; color: var(--muted); padding: 16px;">
+              <strong>No recent order session found on this device.</strong><br>
+              <small>If you have already sent your order on WhatsApp, our team will reply shortly.</small>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      try {
+        const order = JSON.parse(raw);
+        if (reopenBtn && order.waUrl) {
+          reopenBtn.href = order.waUrl;
+        }
+
+        const itemsHtml = (order.items || []).map((it, idx) => `
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed var(--line);">
+            <span>${idx + 1}. <b>${Cart.escapeHtml(it.name)}</b> (${Cart.formatQty(it.qty, it.unit)})</span>
+            <span style="font-weight: 700; color: var(--maroon);">${it.lineTotal != null ? Cart.formatMoney(it.lineTotal) : 'Price on request'}</span>
+          </div>
+        `).join("");
+
+        container.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--line); padding-bottom: 10px; margin-bottom: 12px;">
+            <div>
+              <span style="font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;">Order Identifier</span>
+              <div style="font-family: var(--font-royal); font-size: 17px; font-weight: 800; color: var(--maroon);">${Cart.escapeHtml(order.orderId)}</div>
+            </div>
+            <span class="product-badge" style="position:static; background: #e6f4ea; color: #137333; border-color: #ceead6;">Status: Pending Confirmation</span>
+          </div>
+
+          <div style="font-size: 12.5px; color: var(--ink); margin-bottom: 14px; line-height: 1.6;">
+            <div><b>Customer:</b> ${Cart.escapeHtml(order.customer?.name || 'Valued Customer')}</div>
+            <div><b>Phone:</b> ${Cart.escapeHtml(order.customer?.phone || '')}</div>
+            <div><b>Delivery Address:</b> ${Cart.escapeHtml(order.customer?.address || '')}</div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--maroon); margin-bottom: 6px;">Order Items:</div>
+            ${itemsHtml}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--maroon); padding-top: 8px;">
+            <span>Estimated Total:</span>
+            <span>${Cart.escapeHtml(order.totalText || 'Price on request')}</span>
+          </div>
+        `;
+      } catch (e) {
+        console.error("Error parsing order details", e);
+      }
+    });
+  </script>
+</body>
+</html>
