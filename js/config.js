@@ -24,7 +24,7 @@ const CONFIG = {
       short: "All Products",
       slug: "all",
       desc: "Explore every handcrafted sweet, savoury snack, beverage and gourmet favourite.",
-      banner: "assets/sweets.webp",
+      banner: "assets/categories/sweets.webp",
       url: "shop.html"
     },
     "Sweets": {
@@ -32,7 +32,7 @@ const CONFIG = {
       short: "Sweets",
       slug: "sweets",
       desc: "Authentic ghee-rich laddus, kalakand, halwa, kova items, barfis and festive sweet packs.",
-      banner: "assets/sweets.webp",
+      banner: "assets/categories/sweets.webp",
       url: "sweets.html"
     },
     "Biscuits": {
@@ -40,7 +40,7 @@ const CONFIG = {
       short: "Biscuits",
       slug: "biscuits",
       desc: "Crisp Mithai, Osmania, Jeera and Marie biscuits baked to tea-time perfection.",
-      banner: "assets/biscuits.webp",
+      banner: "assets/categories/biscuits.webp",
       url: "biscuits.html"
     },
     "Beverages": {
@@ -48,7 +48,7 @@ const CONFIG = {
       short: "Beverages",
       slug: "beverages",
       desc: "Rich, chilled, cardamom-saffron infused Mithai Badam 350ml beverage.",
-      banner: "assets/beverages.webp",
+      banner: "assets/categories/beverages.webp",
       url: "beverages.html"
     },
     "Mixtures": {
@@ -56,7 +56,7 @@ const CONFIG = {
       short: "Mixtures",
       slug: "mixtures",
       desc: "Khatta Meetha, Moong Dal, Navratan, Punjabi Tadka and Bombay crispy savory mixtures.",
-      banner: "assets/mixpickles.webp",
+      banner: "assets/categories/mixpickles.webp",
       url: "mixtures.html"
     },
     "Pickles": {
@@ -64,7 +64,7 @@ const CONFIG = {
       short: "Pickles",
       slug: "pickles",
       desc: "Authentic homestyle veg and non-veg pickles preserved with cold-pressed oils & spices.",
-      banner: "assets/mixpickles.webp",
+      banner: "assets/categories/mixpickles.webp",
       url: "pickles.html"
     },
     "Chocolates": {
@@ -72,7 +72,7 @@ const CONFIG = {
       short: "Chocolates",
       slug: "chocolates",
       desc: "Luxury gift boxes, artisanal truffles, filled pralines and crunchy nut chocolates.",
-      banner: "assets/chocolates.webp",
+      banner: "assets/categories/chocolates.webp",
       url: "chocolates.html"
     },
     "Frozen Foods": {
@@ -80,7 +80,7 @@ const CONFIG = {
       short: "Frozen Foods",
       slug: "frozen-foods",
       desc: "Party samosas, momos, kebabs, paneer tikka, spring rolls and gourmet snacks.",
-      banner: "assets/frozen.webp",
+      banner: "assets/categories/frozen.webp",
       url: "frozen-foods.html"
     }
   }

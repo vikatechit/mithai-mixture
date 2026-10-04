@@ -12,7 +12,7 @@ const LOCAL_PRODUCTS = [
     price: 480,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/tripod-laddu.webp",
+    img: "assets/products/tripod-laddu.webp",
     desc: "Signature festive laddu crafted with pure ghee, aromatic cardamom and gram flour.",
     featured: true
   },
@@ -22,7 +22,7 @@ const LOCAL_PRODUCTS = [
     price: 480,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/dry-fruit-laddu.webp",
+    img: "assets/products/dry-fruit-laddu.webp",
     desc: "Nutrient-rich royal laddu loaded with cashews, almonds, pistachios and raisins.",
     featured: true
   },
@@ -32,7 +32,7 @@ const LOCAL_PRODUCTS = [
     price: 440,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/white-kalakand.webp",
+    img: "assets/products/white-kalakand.webp",
     desc: "Soft, granular milk delicacy slowly simmered to velvety, melt-in-mouth perfection.",
     featured: true
   },
@@ -42,7 +42,7 @@ const LOCAL_PRODUCTS = [
     price: 460,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/rost-kalathihan.webp",
+    img: "assets/products/rost-kalathihan.webp",
     desc: "Caramelized roasted milk sweet with deep nutty notes and rich golden crust."
   },
   {
@@ -51,7 +51,7 @@ const LOCAL_PRODUCTS = [
     price: 360,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/all-kova-items.webp",
+    img: "assets/products/all-kova-items.webp",
     desc: "Assorted traditional pure mawa (kova) delicacies hand-crafted with pure dairy milk."
   },
   {
@@ -60,7 +60,7 @@ const LOCAL_PRODUCTS = [
     price: 500,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/spl-kolakand.webp",
+    img: "assets/products/spl-kolakand.webp",
     desc: "Special recipe kalakand garnished with slivered pistachios and fragrant green cardamom.",
     featured: true
   },
@@ -70,7 +70,7 @@ const LOCAL_PRODUCTS = [
     price: 360,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/dry-fruit-halwa.webp",
+    img: "assets/products/dry-fruit-halwa.webp",
     desc: "Glistening ghee halwa enriched with crunchy whole dry fruits and aromatic saffron."
   },
   {
@@ -79,7 +79,7 @@ const LOCAL_PRODUCTS = [
     price: 360,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/ice-cream-barfi.webp",
+    img: "assets/products/ice-cream-barfi.webp",
     desc: "Delightfully chilled style creamy barfi with delicate vanilla and pista layers."
   },
   {
@@ -88,7 +88,7 @@ const LOCAL_PRODUCTS = [
     price: 900,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/kaju-barfi.webp",
+    img: "assets/products/kaju-barfi.webp",
     desc: "Prime quality Mangalore cashew fudge, delicately rolled with pure edible silver vark.",
     featured: true
   },
@@ -98,7 +98,7 @@ const LOCAL_PRODUCTS = [
     price: 220,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/arusulu.webp",
+    img: "assets/products/arusulu.webp",
     desc: "Traditional South Indian heritage delicacy made of fresh rice flour, pure jaggery and ghee."
   },
   {
@@ -107,7 +107,7 @@ const LOCAL_PRODUCTS = [
     price: 180,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/salividi.webp",
+    img: "assets/products/salividi.webp",
     desc: "Wholesome ceremonial sweet delicacy made from freshly ground rice flour and jaggery."
   },
   {
@@ -116,7 +116,7 @@ const LOCAL_PRODUCTS = [
     price: 260,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/kova-kajjikayalu.webp",
+    img: "assets/products/kova-kajjikayalu.webp",
     desc: "Crisp golden crescent pastry stuffed with a rich, aromatic sweetened kova filling."
   },
   {
@@ -125,7 +125,7 @@ const LOCAL_PRODUCTS = [
     price: 340,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/sunnundalu.webp",
+    img: "assets/products/sunnundalu.webp",
     desc: "Classic Andhra urad dal laddus roasted to golden aroma and bound with pure desi ghee."
   },
   {
@@ -134,7 +134,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/bhoondhi-laddu.webp",
+    img: "assets/products/bhoondhi-laddu.webp",
     desc: "Soft, juicy pearl-shaped boondi laddus flavoured with cardamom, cloves and cashews."
   },
   {
@@ -143,7 +143,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/mysurpak.webp",
+    img: "assets/products/mysurpak.webp",
     desc: "Traditional porous gram flour sweet cooked with pure ghee to crisp, airy delicacy."
   },
   {
@@ -152,7 +152,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/basan-laddu.webp",
+    img: "assets/products/basan-laddu.webp",
     desc: "Aromatic roasted besan laddus with crunchy dry fruits and fine desi ghee fragrance."
   },
   {
@@ -161,7 +161,7 @@ const LOCAL_PRODUCTS = [
     price: 180,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/kaja.webp",
+    img: "assets/products/kaja.webp",
     desc: "Multi-layered flaky sweet pastry soaked in cardamom-infused sugar syrup."
   },
   {
@@ -170,7 +170,7 @@ const LOCAL_PRODUCTS = [
     price: 180,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/badusha.webp",
+    img: "assets/products/badusha.webp",
     desc: "Crisp outside, moist and flaky inside traditional Indian glazed doughnut sweet."
   },
   {
@@ -179,7 +179,7 @@ const LOCAL_PRODUCTS = [
     price: 180,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/gorri-mittai.webp",
+    img: "assets/products/gorri-mittai.webp",
     desc: "Authentic crunchy sugar-coated traditional sweet bites, beloved across generations."
   },
   {
@@ -188,7 +188,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/jangiri.webp",
+    img: "assets/products/jangiri.webp",
     desc: "Intricately piped urad dal swirls, deep fried and immersed in fragrant saffron sugar syrup."
   },
   {
@@ -197,7 +197,7 @@ const LOCAL_PRODUCTS = [
     price: 220,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/red-laddu.webp",
+    img: "assets/products/red-laddu.webp",
     desc: "Festive celebration laddu prepared with rich boondi, warm spices and dry fruits."
   },
   {
@@ -206,7 +206,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/yellow-laddu.webp",
+    img: "assets/products/yellow-laddu.webp",
     desc: "Golden yellow sweet laddu prepared fresh daily with gram pearls and pure ghee."
   },
   {
@@ -215,7 +215,7 @@ const LOCAL_PRODUCTS = [
     price: 280,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/milk-mysorepak.webp",
+    img: "assets/products/milk-mysorepak.webp",
     desc: "Velvety, smooth modern Mysorepak prepared with rich condensed milk and desi ghee."
   },
   {
@@ -224,7 +224,7 @@ const LOCAL_PRODUCTS = [
     price: 280,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/cham-cham.webp",
+    img: "assets/products/cham-cham.webp",
     desc: "Traditional Bengali sweet made from fresh paneer, poached in light syrup and rolled in coconut."
   },
   {
@@ -233,7 +233,7 @@ const LOCAL_PRODUCTS = [
     price: 260,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/hala-jamun.webp",
+    img: "assets/products/hala-jamun.webp",
     desc: "Golden-brown soft mawa dumplings steeped in warm saffron sugar nectar."
   },
   {
@@ -242,7 +242,7 @@ const LOCAL_PRODUCTS = [
     price: 200,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/sooanpapdi.webp",
+    img: "assets/products/sooanpapdi.webp",
     desc: "Flaky, crisp ribbon-like confection made from chickpea flour, ghee and crunchy pistas."
   },
   {
@@ -251,7 +251,7 @@ const LOCAL_PRODUCTS = [
     price: 260,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/gulab-jamun.webp",
+    img: "assets/products/gulab-jamun.webp",
     desc: "Classic soft khoya dumplings soaked in rose water and cardamom scented sugar syrup.",
     featured: true
   },
@@ -261,7 +261,7 @@ const LOCAL_PRODUCTS = [
     price: 460,
     cat: "Sweets",
     unit: "kg",
-    img: "assets/mixed-kova-kalakanda.webp",
+    img: "assets/products/mixed-kova-kalakanda.webp",
     desc: "Premium celebratory platter of diverse artisanal kova and kalakand sweets."
   },
 
@@ -272,7 +272,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Sweets",
     unit: "pack",
-    img: "assets/rasgulla-pack.webp",
+    img: "assets/products/rasgulla-pack.webp",
     desc: "Spongy, delicate chhena spheres in light syrup, packed fresh for lasting softness."
   },
   {
@@ -281,7 +281,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Sweets",
     unit: "pack",
-    img: "assets/gulab-jamun-pack.webp",
+    img: "assets/products/gulab-jamun-pack.webp",
     desc: "Sealed gift tin of succulent gulab jamuns, ideal for festive gifting and family gatherings."
   },
   {
@@ -290,7 +290,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Sweets",
     unit: "pack",
-    img: "assets/motichoor-ladoo-pack.webp",
+    img: "assets/products/motichoor-ladoo-pack.webp",
     desc: "Fine pearl-sized motichoor ladoos beautifully presented in protective gift packaging."
   },
   {
@@ -299,7 +299,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Sweets",
     unit: "pack",
-    img: "assets/kaju-katli-pack.webp",
+    img: "assets/products/kaju-katli-pack.webp",
     desc: "Handcrafted diamond-cut kaju katlis sealed in luxury Mithai Mixture presentation boxes."
   },
   {
@@ -308,7 +308,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Sweets",
     unit: "pack",
-    img: "assets/pista-barfi-pack.webp",
+    img: "assets/products/pista-barfi-pack.webp",
     desc: "Pure pistachio mawa barfi with natural green color and rich nutty texture in a gift pack."
   },
 
@@ -319,7 +319,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Biscuits",
     unit: "pack",
-    img: "assets/mithai-biscuit.webp",
+    img: "assets/products/mithai-biscuit.webp",
     desc: "Our signature bakery biscuit with a rich buttery crumb and subtle sweetness.",
     featured: true
   },
@@ -329,7 +329,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Biscuits",
     unit: "pack",
-    img: "assets/osmania-biscuit.webp",
+    img: "assets/products/osmania-biscuit.webp",
     desc: "Heritage Hyderabadi tea biscuit with the classic sweet and subtle salty balance."
   },
   {
@@ -338,7 +338,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Biscuits",
     unit: "pack",
-    img: "assets/jeera-biscuit.webp",
+    img: "assets/products/jeera-biscuit.webp",
     desc: "Crisp savoury tea-time biscuits infused with roasted cumin seeds."
   },
   {
@@ -347,7 +347,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Biscuits",
     unit: "pack",
-    img: "assets/marie-biscuit.webp",
+    img: "assets/products/marie-biscuit.webp",
     desc: "Light, crisp and wholesome golden-baked biscuits ideal for daily dipping."
   },
 
@@ -358,7 +358,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Beverages",
     unit: "bottle",
-    img: "assets/mithai-badam.webp",
+    img: "assets/products/mithai-badam.webp",
     desc: "Creamy, chilled almond beverage flavoured with royal Kashmiri saffron and green cardamom.",
     featured: true
   },
@@ -370,7 +370,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Mixtures",
     unit: "pack",
-    img: "assets/khatta-meetha-mixture.webp",
+    img: "assets/products/khatta-meetha-mixture.webp",
     desc: "Irresistible tangy-sweet medley of crispy sev, fried green peas, nuts and spices.",
     featured: true
   },
@@ -380,7 +380,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Mixtures",
     unit: "pack",
-    img: "assets/moong-dal-mixture.webp",
+    img: "assets/products/moong-dal-mixture.webp",
     desc: "Golden fried, salted split green gram — light, crunchy and protein-packed."
   },
   {
@@ -389,7 +389,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Mixtures",
     unit: "pack",
-    img: "assets/navratan-mixture.webp",
+    img: "assets/products/navratan-mixture.webp",
     desc: "Nine-ingredient royal savoury blend of crispy lentils, roasted nuts and spicy sev."
   },
   {
@@ -398,7 +398,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Mixtures",
     unit: "pack",
-    img: "assets/punjabi-tadka-mixture.webp",
+    img: "assets/products/punjabi-tadka-mixture.webp",
     desc: "Fiery, robust North Indian spiced potato & gram sev with distinctive garlic-chilli tadka."
   },
   {
@@ -407,7 +407,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Mixtures",
     unit: "pack",
-    img: "assets/bombay-mixture.webp",
+    img: "assets/products/bombay-mixture.webp",
     desc: "Zesty street-style crispy mix with peanuts, curry leaves and classic Mumbai spices."
   },
 
@@ -418,7 +418,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/mango-pickle.webp",
+    img: "assets/products/mango-pickle.webp",
     desc: "Traditional Avakaya style raw mango chunks cured in cold-pressed oil, mustard and red chilli.",
     featured: true
   },
@@ -428,7 +428,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/lime-pickle.webp",
+    img: "assets/products/lime-pickle.webp",
     desc: "Sun-cured tart and tangy juicy limes with aromatic fenugreek and asafoetida."
   },
   {
@@ -437,7 +437,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/chilli-pickle.webp",
+    img: "assets/products/chilli-pickle.webp",
     desc: "Fiery green chilli pickle spiced with crushed mustard seeds and lemon juice."
   },
   {
@@ -446,7 +446,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/garlic-pickle.webp",
+    img: "assets/products/garlic-pickle.webp",
     desc: "Whole peeled garlic cloves preserved in spicy, tangy and fragrant Indian pickle gravy."
   },
   {
@@ -455,7 +455,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/chicken-pickle.webp",
+    img: "assets/products/chicken-pickle.webp",
     desc: "Gourmet boneless tender chicken marinated in spicy Andhra masala and sesame oil."
   },
   {
@@ -464,7 +464,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/mutton-pickle.webp",
+    img: "assets/products/mutton-pickle.webp",
     desc: "Succulent pieces of spiced mutton cooked to perfection and preserved in rich aromatic oil."
   },
   {
@@ -473,7 +473,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/prawn-pickle.webp",
+    img: "assets/products/prawn-pickle.webp",
     desc: "Fresh coastal prawns infused with fiery ginger-garlic, curry leaves and ground spices."
   },
   {
@@ -482,7 +482,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Pickles",
     unit: "jar",
-    img: "assets/fish-pickle.webp",
+    img: "assets/products/fish-pickle.webp",
     desc: "Firm coastal fish fillets cured in tangy vinegar, roasted spices and sesame oil."
   },
 
@@ -493,7 +493,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/dark-chocolate.webp",
+    img: "assets/products/dark-chocolate.webp",
     desc: "Rich 70% cocoa single-origin dark chocolate bar with deep bittersweet notes.",
     featured: true
   },
@@ -503,7 +503,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/milk-chocolate.webp",
+    img: "assets/products/milk-chocolate.webp",
     desc: "Silky, smooth European style milk chocolate crafted with whole dairy cream."
   },
   {
@@ -512,7 +512,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/premium-assorted-chocolates.webp",
+    img: "assets/products/premium-assorted-chocolates.webp",
     desc: "Luxury gift box combining dark, milk, nutty and fruit-filled chocolate masterpieces.",
     featured: true
   },
@@ -522,7 +522,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/chocolate-truffles.webp",
+    img: "assets/products/chocolate-truffles.webp",
     desc: "Velvety cocoa ganache truffles hand-rolled in pure cocoa powder and hazelnut crisps."
   },
   {
@@ -531,7 +531,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/filled-chocolates.webp",
+    img: "assets/products/filled-chocolates.webp",
     desc: "Decadent chocolate bonbons filled with salted caramel, berry compote and almond praline."
   },
   {
@@ -540,7 +540,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Chocolates",
     unit: "box",
-    img: "assets/nut-chocolates.webp",
+    img: "assets/products/nut-chocolates.webp",
     desc: "Crunchy roasted California almonds and pistachios smothered in creamy chocolate."
   },
 
@@ -551,7 +551,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/samosa.webp",
+    img: "assets/products/samosa.webp",
     desc: "Golden, crispy triangular pastries stuffed with spiced potatoes and green peas.",
     featured: true
   },
@@ -561,7 +561,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/veg-momos.webp",
+    img: "assets/products/veg-momos.webp",
     desc: "Steamed or fried Himalayan style dumplings filled with seasoned farm-fresh vegetables."
   },
   {
@@ -570,7 +570,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/chicken-nuggets.webp",
+    img: "assets/products/chicken-nuggets.webp",
     desc: "Tender, juicy chicken bites with a golden crispy crumb coating. Ready to fry or air-fry."
   },
   {
@@ -579,7 +579,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/paneer-snacks.webp",
+    img: "assets/products/paneer-snacks.webp",
     desc: "Crumb-coated malai paneer cutlets with fresh herbs and spices. Perfect for parties."
   },
   {
@@ -588,7 +588,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/chicken-seekh-kebab.webp",
+    img: "assets/products/chicken-seekh-kebab.webp",
     desc: "Authentic tandoori spiced minced chicken skewers infused with mint, coriander and ginger."
   },
   {
@@ -597,7 +597,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/french-fries.webp",
+    img: "assets/products/french-fries.webp",
     desc: "Extra-crispy premium potato fries, pre-cut and flash-frozen for rapid crisp frying."
   },
   {
@@ -606,7 +606,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/spring-rolls.webp",
+    img: "assets/products/spring-rolls.webp",
     desc: "Delicate, crispy wonton rolls filled with shredded crunchy vegetables and mild spices."
   },
   {
@@ -615,7 +615,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/paneer-paratha.webp",
+    img: "assets/products/paneer-paratha.webp",
     desc: "Homestyle whole wheat layered flatbread generously stuffed with spiced grated paneer."
   },
   {
@@ -624,7 +624,7 @@ const LOCAL_PRODUCTS = [
     price: null,
     cat: "Frozen Foods",
     unit: "pack",
-    img: "assets/paneer-tikka.webp",
+    img: "assets/products/paneer-tikka.webp",
     desc: "Chargrilled marinated cottage cheese cubes with bell peppers and roasted tandoori masala."
   }
 ];
