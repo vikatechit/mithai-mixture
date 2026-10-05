@@ -15,9 +15,9 @@ const slides = HERO_SLIDES.map(p => ({
 
 function heroCardSize() {
   if (typeof window === 'undefined') return { w: 300, h: 380, stage: 540 }
-  if (window.innerWidth < 720) return { w: 200, h: 260, stage: 380 }
-  if (window.innerWidth < 980) return { w: 240, h: 310, stage: 460 }
-  return { w: 300, h: 380, stage: 540 }
+  if (window.innerWidth < 720) return { w: 160, h: 210, stage: 280 }
+  if (window.innerWidth < 1180) return { w: 220, h: 280, stage: 360 }
+  return { w: 280, h: 350, stage: 460 }
 }
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
       />
       <section className="hero">
         <div className="hero-copy">
-          <p className="kicker">{BRAND.name}</p>
+          <p className="hero-name">{BRAND.name}</p>
           <h1>{BRAND.tagline}</h1>
           <p className="lede">Premium Indian flavours, prepared for celebrations, gifting and the family table. Pure ghee sweets, crisp mixtures and festive favourites.</p>
           <div className="btn-row">
@@ -51,7 +51,7 @@ export default function Home() {
           <DepthCarousel
             items={slides}
             depth={220}
-            spread={card.w < 260 ? 72 : 160}
+            spread={card.w < 200 ? 48 : card.w < 260 ? 72 : 120}
             tilt={22}
             tiltDirection="right"
             perspective={1400}

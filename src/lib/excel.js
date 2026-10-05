@@ -14,7 +14,7 @@ function cell(value, type) {
 }
 
 export function downloadOrdersExcel(orders) {
-  const header = ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Items', 'Subtotal', 'Status']
+  const header = ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Note', 'Items', 'Subtotal']
   const rows = orders.map(order => {
     const items = (order.items || [])
       .map(item => `${item.name} x ${item.qty} ${item.unit || ''}`.trim())
@@ -25,14 +25,14 @@ export function downloadOrdersExcel(orders) {
       order.name,
       order.phone,
       order.address,
+      order.note || '',
       items,
-      order.total ?? '',
-      order.status || 'Pending'
+      order.total ?? ''
     ]
   })
 
   const table = [header, ...rows].map(row => {
-    return `<Row>${row.map((value, i) => cell(value, i === 6 ? 'Number' : 'String')).join('')}</Row>`
+    return `<Row>${row.map((value, i) => cell(value, i === 7 ? 'Number' : 'String')).join('')}</Row>`
   }).join('')
 
   const workbook = `<?xml version="1.0"?>

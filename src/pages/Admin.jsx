@@ -1,11 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Seo from '../components/Seo'
-import { CATEGORIES } from '../data/brand'
+import { BRAND, CATEGORIES } from '../data/brand'
 import { useStore } from '../context/Store'
 import { money } from '../lib/format'
 import { downloadOrdersExcel } from '../lib/excel'
-
-const STATUSES = ['Pending', 'Confirmed', 'Packed', 'Out for delivery', 'Delivered', 'Cancelled']
 
 export default function Admin() {
   const store = useStore()
@@ -21,20 +19,27 @@ export default function Admin() {
   const [waInput, setWaInput] = useState(store.whatsappDisplay)
 
   const stats = useMemo(() => {
-    const byStatus = Object.fromEntries(STATUSES.map(s => [s, 0]))
     const byCat = {}
     let sales = 0
     store.orders.forEach(order => {
       sales += Number(order.total || 0)
-      const status = order.status || 'Pending'
-      byStatus[status] = (byStatus[status] || 0) + 1
       ;(order.items || []).forEach(item => {
         const value = Number(item.lineTotal || 0)
         byCat[item.cat || 'Other'] = (byCat[item.cat || 'Other'] || 0) + value
       })
     })
-    return { sales, byStatus, byCat }
+    return { sales, byCat }
   }, [store.orders])
+
+  useEffect(() => {
+    if (!store.authed) return undefined
+    let cancel = false
+    store.syncOrders().then(result => {
+      if (cancel || !result.ok) return
+      setNotice(`Loaded ${result.count} orders from the Google Sheet.`)
+    })
+    return () => { cancel = true }
+  }, [store.authed])
 
   const login = async (e) => {
     e.preventDefault()
@@ -59,10 +64,10 @@ export default function Admin() {
   if (!store.authed) {
     return (
       <section className="section narrow">
-        <Seo title="Admin | Mithai Mixture" description="Private admin sign-in for Mithai Mixture." />
+        <Seo title="Admin | Mithai Mixture" description="Private admin sign-in for Mithai Mixture." noindex />
         <p className="kicker">Private</p>
         <h1>Admin</h1>
-        <p>Password access for orders, the sales dashboard and new items. OTP is optional and is not switched on.</p>
+        <p>Password access for orders, the sales dashboard and new items.</p>
         <form className="form" onSubmit={login}>
           <label>Password<input type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required /></label>
           {error && <p className="err">{error}</p>}
@@ -74,7 +79,7 @@ export default function Admin() {
 
   return (
     <section className="section">
-      <Seo title="Dashboard | Mithai Mixture Admin" description="Mithai Mixture order and sales dashboard." />
+      <Seo title="Dashboard | Mithai Mixture Admin" description="Mithai Mixture order and sales dashboard." noindex />
       <div className="admin-top">
         <div>
           <p className="kicker">Admin</p>
@@ -95,18 +100,10 @@ export default function Admin() {
           <div className="kpi-grid">
             <article><span>Orders</span><strong>{store.orders.length}</strong></article>
             <article><span>Sales recorded</span><strong>{money(stats.sales)}</strong></article>
-            <article><span>Pending</span><strong>{stats.byStatus.Pending || 0}</strong></article>
-            <article><span>Delivered</span><strong>{stats.byStatus.Delivered || 0}</strong></article>
           </div>
-          <div className="split">
-            <div className="panel">
-              <h2>Sales by category</h2>
-              <Bars rows={Object.entries(stats.byCat).map(([label, value]) => ({ label, value }))} format={money} empty="Place or sync an order to draw this chart." />
-            </div>
-            <div className="panel">
-              <h2>Orders by status</h2>
-              <Bars rows={STATUSES.map(label => ({ label, value: stats.byStatus[label] || 0 }))} empty="No orders yet." />
-            </div>
+          <div className="panel">
+            <h2>Sales by category</h2>
+            <Bars rows={Object.entries(stats.byCat).map(([label, value]) => ({ label, value }))} format={money} empty="Place or sync an order to draw this chart." />
           </div>
           <button type="button" className="btn glow" onClick={async () => {
             const result = await store.syncOrders()
@@ -127,21 +124,21 @@ export default function Admin() {
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr>
+                <tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th></tr>
               </thead>
               <tbody>
-                {store.orders.length === 0 && <tr><td colSpan={5}>No orders on this browser yet. Sync the Google Sheet after it is connected.</td></tr>}
+                {store.orders.length === 0 && <tr><td colSpan={4}>No orders yet. Orders placed on any phone appear here after the Google Sheet is connected.</td></tr>}
                 {store.orders.map(order => (
                   <tr key={order.id}>
-                    <td>{order.id}<br /><span className="muted">{order.date ? new Date(order.date).toLocaleString('en-IN') : ''}</span></td>
-                    <td>{order.name}<br />{order.phone}</td>
-                    <td>{(order.items || []).map(item => item.name).join(', ')}</td>
-                    <td>{money(order.total || 0)}</td>
-                    <td>
-                      <select value={order.status || 'Pending'} onChange={e => store.updateStatus(order.id, e.target.value)} aria-label={`Status for ${order.id}`}>
-                        {STATUSES.map(s => <option key={s}>{s}</option>)}
-                      </select>
+                    <td data-label="Order">{order.id}<br /><span className="muted">{order.date ? new Date(order.date).toLocaleString('en-IN') : ''}</span></td>
+                    <td data-label="Customer">
+                      <strong>{order.name}</strong><br />
+                      {order.phone}<br />
+                      {order.address}
+                      {order.note ? <><br /><span className="muted">{order.note}</span></> : null}
                     </td>
+                    <td data-label="Items">{(order.items || []).map(item => `${item.name} × ${item.qty} ${item.unit || ''}`).join(', ')}</td>
+                    <td data-label="Total">{money(order.total || 0)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -228,23 +225,18 @@ export default function Admin() {
       {tab === 'where' && (
         <div className="prose panel">
           <h2>Where the Google Sheet lives</h2>
-          <p>This website does not use a Google Form. Items, prices, orders and status are rows in a Google Sheet that you create in your own Google Drive.</p>
-          <ol>
-            <li>Open <a className="gold" href="https://sheets.google.com" target="_blank" rel="noreferrer">sheets.google.com</a> and create a sheet named Mithai Mixture.</li>
-            <li>Go to Extensions → Apps Script, paste <code>Code.gs</code> from this project folder, and run <code>setup</code>.</li>
-            <li>Deploy → New deployment → Web app → Execute as Me → Anyone. Copy the URL that ends in <code>/exec</code>.</li>
-            <li>Paste that URL in Admin → Settings. The dashboard then reads the Orders tab.</li>
-          </ol>
-          <p>After setup, open the Google Sheet. You will see these tabs:</p>
+          <p>Orders, customer details and items are stored in this Google Sheet. An order placed on any phone or laptop appears in this dashboard after you open it and sign in. There is no Google Form and no OTP.</p>
+          <p><a className="gold" href={BRAND.sheetUrl} target="_blank" rel="noreferrer">Open the Mithai Mixture order sheet</a></p>
+          <p>The website is already connected to that sheet. If the connection is ever replaced, paste the new Apps Script web app URL under Settings.</p>
+          <p>The sheet tabs are:</p>
           <ul>
-            <li><strong>Products</strong> — item name, category, price, unit, image, description.</li>
-            <li><strong>Orders</strong> — order id, customer, items, subtotal and status.</li>
-            <li><strong>Customers</strong> — phone book built as orders arrive.</li>
+            <li><strong>Orders</strong> — order id, date, customer name, phone, address, note, items and subtotal.</li>
+            <li><strong>Customers</strong> — phone, name and address, updated as orders arrive.</li>
+            <li><strong>Products</strong> — item name, category, price, unit, image and description.</li>
             <li><strong>Enquiries</strong> — messages from the contact page.</li>
-            <li><strong>Settings</strong> — includes the sheet password.</li>
-            <li><strong>Categories</strong> — department list.</li>
+            <li><strong>Settings</strong> — sheet password and WhatsApp number.</li>
           </ul>
-          <p>Change a price in the Products tab and reload the shop. Change a status here or in the Orders tab. The Excel download is a copy of the orders currently loaded in this dashboard.</p>
+          <p>The Excel download is a copy of the orders currently loaded in this dashboard, including the customer details.</p>
         </div>
       )}
 

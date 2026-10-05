@@ -10,7 +10,8 @@ const TYPES = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.txt': 'text/plain'
+  '.txt': 'text/plain',
+  '.webmanifest': 'application/manifest+json'
 }
 
 function assetsPlugin() {
@@ -33,7 +34,7 @@ function assetsPlugin() {
     },
     closeBundle() {
       fs.cpSync(root, path.resolve('dist/assets'), { recursive: true })
-      for (const file of ['robots.txt', 'sitemap.xml', 'favicon.ico']) {
+      for (const file of ['robots.txt', 'sitemap.xml', 'favicon.ico', 'manifest.webmanifest']) {
         const src = path.resolve(file)
         if (fs.existsSync(src)) fs.copyFileSync(src, path.resolve('dist', file))
       }

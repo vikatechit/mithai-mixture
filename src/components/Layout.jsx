@@ -22,7 +22,6 @@ export default function Layout({ children }) {
     <>
       <div className="announcement">
         <strong>{BRAND.tagline}</strong>
-        <span>Premium sweets · snacks · happiness</span>
         <a href={`https://wa.me/${store.whatsapp}`} target="_blank" rel="noreferrer">WhatsApp {store.whatsappDisplay}</a>
       </div>
       <header className="header">
@@ -73,7 +72,6 @@ export default function Layout({ children }) {
             <h3>Orders</h3>
             <a href={`https://wa.me/${store.whatsapp}`} target="_blank" rel="noreferrer">{store.whatsappDisplay}</a>
             <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
-            <Link to="/admin">Admin</Link>
           </div>
         </div>
         <p className="fine">FSSAI licensed & hygienic preparation · © {new Date().getFullYear()} {BRAND.name}</p>
@@ -100,7 +98,7 @@ export default function Layout({ children }) {
                 </div>
                 <button type="button" className="text-btn" onClick={() => store.remove(line.id)}>Remove</button>
               </div>
-              <b>{line.lineTotal != null ? money(line.lineTotal) : 'Pending'}</b>
+              <b>{line.lineTotal != null ? money(line.lineTotal) : 'On request'}</b>
             </article>
           ))}
         </div>

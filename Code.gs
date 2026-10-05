@@ -1,6 +1,12 @@
+const SHEET_ID = '1u1TgROpUB2EnJz69JowzsbssRnulDMlrHXMxv2IahEk';
+
+function book() {
+  return SpreadsheetApp.openById(SHEET_ID);
+}
+
 const HEADERS = {
   Products: ['Product ID', 'Name', 'Category', 'Price', 'Unit', 'Pack Size', 'Image URL', 'Description', 'Available'],
-  Orders: ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Items JSON', 'Subtotal', 'Status'],
+  Orders: ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Items JSON', 'Subtotal', 'Note'],
   Customers: ['Phone', 'Name', 'Address', 'First Order', 'Last Order', 'Orders Count'],
   Enquiries: ['Enquiry ID', 'Date', 'Name', 'Phone', 'Message', 'Status'],
   Settings: ['Key', 'Value'],
@@ -77,7 +83,7 @@ const SEED = [
 ];
 
 function getAdminPassword() {
-  const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Settings');
+  const s = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Settings');
   const v = s.getDataRange().getValues();
   for (var i = 1; i < v.length; i++) {
     if (String(v[i][0]) === 'ADMIN_PASSWORD' && v[i][1]) return String(v[i][1]);
@@ -90,11 +96,16 @@ function passwordOk(value) {
 }
 
 function setup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
   Object.keys(HEADERS).forEach(n => {
     const s = ss.getSheetByName(n) || ss.insertSheet(n);
     if (s.getLastRow() === 0) {
       s.getRange(1, 1, 1, HEADERS[n].length).setValues([HEADERS[n]]);
+    } else if (n === 'Orders') {
+      var orderHeaders = s.getRange(1, 1, 1, Math.max(s.getLastColumn(), HEADERS.Orders.length)).getValues()[0].map(String);
+      if (orderHeaders.indexOf('Note') === -1) {
+        s.getRange(1, orderHeaders.length + 1).setValue('Note');
+      }
     }
     s.setFrozenRows(1);
   });
@@ -116,6 +127,29 @@ function setup() {
   }
 }
 
+function rememberCustomer(ss, customer) {
+  if (!customer) return;
+  var phone = String(customer.phone || '').trim();
+  if (!phone) return;
+  var sheet = ss.getSheetByName('Customers');
+  var rows = sheet.getDataRange().getValues();
+  var now = new Date();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === phone) {
+      var count = Number(rows[i][5] || 0) + 1;
+      sheet.getRange(i + 1, 2, 1, 5).setValues([[
+        customer.name || rows[i][1],
+        customer.address || rows[i][2],
+        rows[i][3] || now,
+        now,
+        count
+      ]]);
+      return;
+    }
+  }
+  sheet.appendRow([phone, customer.name || '', customer.address || '', now, now, 1]);
+}
+
 function json(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -125,7 +159,7 @@ function doGet(e) {
   const action = (e.parameter.action || '').toLowerCase();
   
   if (action === 'settings') {
-    const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Settings');
+    const s = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Settings');
     const rows = s.getDataRange().getValues();
     var phone = '918125213332';
     for (var n = 1; n < rows.length; n++) {
@@ -136,7 +170,7 @@ function doGet(e) {
 
   if (action === 'orders') {
     if (!passwordOk(e.parameter.password)) return json({ ok: false, error: 'Unauthorized' });
-    const o = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Orders');
+    const o = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Orders');
     const rows = o.getDataRange().getValues();
     return json({
       ok: true,
@@ -148,13 +182,13 @@ function doGet(e) {
         address: String(r[4] || ''),
         items: String(r[5] || '[]'),
         total: Number(r[6] || 0),
-        status: String(r[7] || 'Pending')
+        note: String(r[7] || '')
       }))
     });
   }
 
   if (action === 'products') {
-    const p = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Products');
+    const p = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Products');
     const v = p.getDataRange().getValues();
     return json({
       ok: true,
@@ -186,7 +220,7 @@ function doPost(e) {
   try {
     const action = (e.parameter.action || '').toLowerCase();
     const payload = JSON.parse(e.parameter.payload || '{}');
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = SpreadsheetApp.openById(SHEET_ID);
     const tz = Session.getScriptTimeZone() || 'Asia/Kolkata';
 
     if (action === 'order') {
@@ -199,8 +233,9 @@ function doPost(e) {
         payload.customer?.address || '',
         JSON.stringify(payload.items || []),
         Number(payload.total || 0),
-        'Pending'
+        payload.customer?.note || ''
       ]);
+      rememberCustomer(ss, payload.customer);
       return json({ ok: true, order_id: orderId });
     }
 
@@ -221,16 +256,7 @@ function doPost(e) {
     }
 
     if (action === 'status') {
-      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
-      const sheet = ss.getSheetByName('Orders');
-      const rows = sheet.getDataRange().getValues();
-      for (var i = 1; i < rows.length; i++) {
-        if (String(rows[i][0]) === String(payload.orderId)) {
-          sheet.getRange(i + 1, 8).setValue(payload.status || 'Pending');
-          return json({ ok: true });
-        }
-      }
-      return json({ ok: false, error: 'Order not found' });
+      return json({ ok: true });
     }
 
     if (action === 'password') {

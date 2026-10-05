@@ -35,6 +35,12 @@ function matchLocal(p) {
   return CATALOG.find(c => c.id === p.id || c.name.toLowerCase() === String(p.name || '').toLowerCase())
 }
 
+function sheetImage(src) {
+  if (!src) return ''
+  if (/^https?:/i.test(src) || src.startsWith('/')) return src
+  return `/${String(src).replace(/^\.?\//, '')}`
+}
+
 function normalizeSheetProduct(p) {
   const local = matchLocal(p)
   const price = p.price === '' || p.price == null || Number.isNaN(Number(p.price)) ? (local?.price ?? null) : Number(p.price)
@@ -44,8 +50,8 @@ function normalizeSheetProduct(p) {
     price,
     cat: p.cat || local?.cat || 'Sweets',
     unit: p.unit || local?.unit || 'kg',
-    img: p.img || local?.img || local?.fallback || BRAND.logo,
-    fallback: local?.fallback || BRAND.logo,
+    img: local?.img || sheetImage(p.img) || BRAND.logo,
+    fallback: local?.fallback || sheetImage(p.img) || BRAND.logo,
     desc: p.desc || local?.desc || 'Handcrafted Mithai Mixture speciality.',
     featured: local?.featured || false,
     available: p.available || 'YES'
@@ -57,7 +63,7 @@ export function StoreProvider({ children }) {
   const [custom, setCustom] = useState(() => read(K.custom, []))
   const [hidden, setHidden] = useState(() => read(K.hidden, []))
   const [orders, setOrders] = useState(() => read(K.orders, []))
-  const [scriptUrl, setScriptUrlState] = useState(() => localStorage.getItem(K.script) || '')
+  const [scriptUrl, setScriptUrlState] = useState(() => localStorage.getItem(K.script) || BRAND.scriptUrl)
   const [whatsapp, setWhatsappState] = useState(() => localStorage.getItem(K.whatsapp) || BRAND.whatsapp)
   const [sheetProducts, setSheetProducts] = useState(null)
   const [sheetNote, setSheetNote] = useState('')
@@ -189,8 +195,7 @@ export function StoreProvider({ children }) {
         lineTotal: line.lineTotal,
         cat: line.cat
       })),
-      total: subtotal,
-      status: 'Pending'
+      total: subtotal
     }
     setOrders(prev => [order, ...prev])
     clearCart()
@@ -277,7 +282,7 @@ export function StoreProvider({ children }) {
     const incoming = (data.orders || []).map(o => {
       let items = []
       try { items = typeof o.items === 'string' ? JSON.parse(o.items || '[]') : (o.items || []) } catch { items = [] }
-      return { ...o, items, total: Number(o.total || 0), status: o.status || 'Pending' }
+      return { ...o, items, total: Number(o.total || 0), note: o.note || '' }
     })
     setOrders(prev => {
       const map = new Map(prev.map(o => [o.id, o]))

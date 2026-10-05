@@ -17,7 +17,7 @@ export default function Success() {
       <Seo title="Order received | Mithai Mixture" description="Your Mithai Mixture order has been recorded." />
       <p className="kicker">Order received</p>
       <h1>{order.id}</h1>
-      <p>Status: <strong>{order.status || 'Pending'}</strong>. Confirm the same order on WhatsApp so the kitchen can pack it.</p>
+      <p>Confirm this order on WhatsApp so the kitchen can pack it.</p>
       <div className="panel">
         <p>{order.name} · {order.phone}</p>
         <p>{order.address}</p>
