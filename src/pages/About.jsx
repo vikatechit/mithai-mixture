@@ -18,7 +18,7 @@ export default function About() {
             <Link className="btn btn-ghost glow" to="/contact">Contact</Link>
           </div>
         </div>
-        <SmartImg src="/assets/sweets.webp" alt="Traditional Mithai Mixture sweets" />
+        <SmartImg className="story-photo" src="/assets/categories/sweets.jpg" alt="Traditional Mithai Mixture sweets" />
       </div>
       <div className="promise-grid">
         {[

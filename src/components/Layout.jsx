@@ -23,7 +23,7 @@ export default function Layout({ children }) {
       <div className="announcement">
         <strong>{BRAND.tagline}</strong>
         <span>Premium sweets · snacks · happiness</span>
-        <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer">WhatsApp {BRAND.whatsappDisplay}</a>
+        <a href={`https://wa.me/${store.whatsapp}`} target="_blank" rel="noreferrer">WhatsApp {store.whatsappDisplay}</a>
       </div>
       <header className="header">
         <div className="nav-wrap">
@@ -71,7 +71,7 @@ export default function Layout({ children }) {
           </div>
           <div>
             <h3>Orders</h3>
-            <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer">{BRAND.whatsappDisplay}</a>
+            <a href={`https://wa.me/${store.whatsapp}`} target="_blank" rel="noreferrer">{store.whatsappDisplay}</a>
             <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
             <Link to="/admin">Admin</Link>
           </div>

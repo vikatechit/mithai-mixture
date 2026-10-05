@@ -105,6 +105,11 @@ function setup() {
     if (String(vals[i][0]) === 'ADMIN_PASSWORD') hasPass = true;
   }
   if (!hasPass) settings.appendRow(['ADMIN_PASSWORD', 'Mithai@13332']);
+  var hasPhone = false;
+  for (var k = 1; k < vals.length; k++) {
+    if (String(vals[k][0]) === 'WHATSAPP') hasPhone = true;
+  }
+  if (!hasPhone) settings.appendRow(['WHATSAPP', '918125213332']);
   const p = ss.getSheetByName('Products');
   if (p.getLastRow() <= 1) {
     p.getRange(2, 1, SEED.length, SEED[0].length).setValues(SEED);
@@ -119,6 +124,16 @@ function doGet(e) {
   setup();
   const action = (e.parameter.action || '').toLowerCase();
   
+  if (action === 'settings') {
+    const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Settings');
+    const rows = s.getDataRange().getValues();
+    var phone = '918125213332';
+    for (var n = 1; n < rows.length; n++) {
+      if (String(rows[n][0]) === 'WHATSAPP' && rows[n][1]) phone = String(rows[n][1]).replace(/\D/g, '');
+    }
+    return json({ ok: true, whatsapp: phone });
+  }
+
   if (action === 'orders') {
     if (!passwordOk(e.parameter.password)) return json({ ok: false, error: 'Unauthorized' });
     const o = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Orders');
@@ -230,6 +245,21 @@ function doPost(e) {
       }
       settings.appendRow(['ADMIN_PASSWORD', payload.newPassword || '']);
       return json({ ok: true });
+    }
+
+    if (action === 'whatsapp') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const settings = ss.getSheetByName('Settings');
+      const rows = settings.getDataRange().getValues();
+      const phone = String(payload.whatsapp || '').replace(/\D/g, '');
+      for (var w = 1; w < rows.length; w++) {
+        if (String(rows[w][0]) === 'WHATSAPP') {
+          settings.getRange(w + 1, 2).setValue(phone);
+          return json({ ok: true, whatsapp: phone });
+        }
+      }
+      settings.appendRow(['WHATSAPP', phone]);
+      return json({ ok: true, whatsapp: phone });
     }
 
     if (action === 'enquiry') {

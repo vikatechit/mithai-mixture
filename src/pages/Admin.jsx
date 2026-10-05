@@ -18,6 +18,7 @@ export default function Admin() {
   const [draft, setDraft] = useState({ name: '', cat: 'Sweets', price: '', unit: 'kg', img: '', desc: '' })
   const [pwForm, setPwForm] = useState({ current: '', next: '' })
   const [sheet, setSheet] = useState(store.scriptUrl)
+  const [waInput, setWaInput] = useState(store.whatsappDisplay)
 
   const stats = useMemo(() => {
     const byStatus = Object.fromEntries(STATUSES.map(s => [s, 0]))
@@ -186,15 +187,29 @@ export default function Admin() {
       )}
 
       {tab === 'settings' && (
-        <div className="split">
-          <form className="form" onSubmit={(e) => { e.preventDefault(); store.setScriptUrl(sheet); setNotice('Google Sheet URL saved on this browser.') }}>
+        <div className="settings-grid">
+          <form className="form panel" onSubmit={async (e) => {
+            e.preventDefault()
+            const result = await store.setWhatsapp(waInput)
+            setError(result.ok ? '' : result.error)
+            setNotice(result.ok ? (result.warning || 'WhatsApp number updated across the website.') : '')
+            if (result.ok) setWaInput(store.whatsappDisplay)
+          }}>
+            <h2>Order WhatsApp number</h2>
+            <p className="muted">This number is used in the top bar, footer, contact page and checkout.</p>
+            <label>WhatsApp number
+              <input value={waInput} onChange={e => setWaInput(e.target.value)} placeholder="8125213332" inputMode="tel" required />
+            </label>
+            <button className="btn glow" type="submit">Save number</button>
+          </form>
+          <form className="form panel" onSubmit={(e) => { e.preventDefault(); store.setScriptUrl(sheet); setNotice('Google Sheet URL saved on this browser.') }}>
             <h2>Google Sheet connection</h2>
             <label>Apps Script web app URL
               <input value={sheet} onChange={e => setSheet(e.target.value)} placeholder="https://script.google.com/macros/s/…/exec" />
             </label>
             <button className="btn glow" type="submit">Save URL</button>
           </form>
-          <form className="form" onSubmit={async (e) => {
+          <form className="form panel" onSubmit={async (e) => {
             e.preventDefault()
             const result = await store.changePassword(pwForm.current, pwForm.next)
             setError(result.ok ? '' : result.error)

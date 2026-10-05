@@ -18,7 +18,7 @@ export default function Checkout() {
     const order = await store.placeOrder(form)
     const lines = order.items.map(item => `• ${item.name} — ${qtyLabel(item.qty, item.unit)}`).join('\n')
     const text = `Hello Mithai Mixture, I would like to confirm order ${order.id}.\n${form.name}\n${form.phone}\n${form.address}\n\n${lines}\n\nSubtotal: ${order.total ? money(order.total) : 'Price on request'}`
-    sessionStorage.setItem('mm_last_order', JSON.stringify({ ...order, whatsapp: waLink(text) }))
+    sessionStorage.setItem('mm_last_order', JSON.stringify({ ...order, whatsapp: waLink(text, store.whatsapp) }))
     navigate('/success')
   }
 

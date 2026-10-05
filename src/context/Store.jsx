@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { CATALOG } from '../data/catalog'
-import { BRAND } from '../data/brand'
-import { fetchOrders, fetchProducts, postAction } from '../lib/sheets'
+import { BRAND, formatWhatsapp } from '../data/brand'
+import { fetchOrders, fetchProducts, fetchSettings, postAction } from '../lib/sheets'
 import { orderStamp, stepFor } from '../lib/format'
 
 const StoreContext = createContext(null)
@@ -13,7 +13,8 @@ const K = {
   hidden: 'mm_hidden_v5',
   hash: 'mm_admin_hash_v5',
   script: 'mm_script_url_v5',
-  enquiries: 'mm_enquiries_v5'
+  enquiries: 'mm_enquiries_v5',
+  whatsapp: 'mm_whatsapp_v5'
 }
 
 function read(key, fallback) {
@@ -57,6 +58,7 @@ export function StoreProvider({ children }) {
   const [hidden, setHidden] = useState(() => read(K.hidden, []))
   const [orders, setOrders] = useState(() => read(K.orders, []))
   const [scriptUrl, setScriptUrlState] = useState(() => localStorage.getItem(K.script) || '')
+  const [whatsapp, setWhatsappState] = useState(() => localStorage.getItem(K.whatsapp) || BRAND.whatsapp)
   const [sheetProducts, setSheetProducts] = useState(null)
   const [sheetNote, setSheetNote] = useState('')
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('mm_admin_session_v5') === 'yes')
@@ -67,6 +69,22 @@ export function StoreProvider({ children }) {
   useEffect(() => { localStorage.setItem(K.custom, JSON.stringify(custom)) }, [custom])
   useEffect(() => { localStorage.setItem(K.hidden, JSON.stringify(hidden)) }, [hidden])
   useEffect(() => { localStorage.setItem(K.orders, JSON.stringify(orders)) }, [orders])
+
+  const phone = formatWhatsapp(whatsapp)
+
+  useEffect(() => {
+    if (!scriptUrl) return undefined
+    let cancel = false
+    fetchSettings(scriptUrl)
+      .then(data => {
+        if (cancel || !data?.ok || !data.whatsapp) return
+        const next = formatWhatsapp(data.whatsapp)
+        localStorage.setItem(K.whatsapp, next.whatsapp)
+        setWhatsappState(next.whatsapp)
+      })
+      .catch(() => {})
+    return () => { cancel = true }
+  }, [scriptUrl])
 
   const products = useMemo(() => {
     const base = (sheetProducts?.length ? sheetProducts : CATALOG).map(p => ({ ...p }))
@@ -310,9 +328,28 @@ export function StoreProvider({ children }) {
     return { ok: true, product }
   }
 
+  const setWhatsapp = async (input) => {
+    const next = formatWhatsapp(input)
+    if (next.whatsapp.length < 12) return { ok: false, error: 'Enter a valid mobile number with country code, for example 8125213332.' }
+    localStorage.setItem(K.whatsapp, next.whatsapp)
+    setWhatsappState(next.whatsapp)
+    if (!scriptUrl) {
+      return { ok: true, warning: 'WhatsApp number updated in the header, footer, contact page and checkout. Connect the Google Sheet so every visitor sees it.' }
+    }
+    try {
+      const password = sessionStorage.getItem('mm_admin_pw') || ''
+      const data = await postAction(scriptUrl, 'whatsapp', { password, whatsapp: next.whatsapp })
+      if (data && data.ok === false) return { ok: true, warning: 'Updated on this website. Google Sheet rejected the change: ' + (data.error || 'unknown') }
+    } catch {
+      return { ok: true, warning: 'Updated on this website. Google Sheet could not be updated.' }
+    }
+    return { ok: true }
+  }
+
   const value = {
     products, lines, subtotal, hasPriceOnRequest, cartCount: lines.length,
     cartOpen, setCartOpen, toast, showToast, sheetNote, scriptUrl, setScriptUrl,
+    whatsapp: phone.whatsapp, whatsappDisplay: phone.whatsappDisplay, setWhatsapp,
     add, changeQty, remove, clearCart, placeOrder, saveEnquiry,
     orders, authed, login, logout, changePassword, passwordMatches,
     syncOrders, updateStatus, addProduct

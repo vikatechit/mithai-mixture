@@ -4,7 +4,7 @@ import { BRAND, waLink } from '../data/brand'
 import { useStore } from '../context/Store'
 
 export default function Contact() {
-  const { saveEnquiry } = useStore()
+  const { saveEnquiry, whatsapp, whatsappDisplay } = useStore()
   const [form, setForm] = useState({ name: '', phone: '', message: '' })
   const [done, setDone] = useState('')
 
@@ -23,9 +23,9 @@ export default function Contact() {
         <div>
           <p className="kicker">Talk to us</p>
           <h1>Contact</h1>
-          <p>Orders and questions are handled on WhatsApp {BRAND.whatsappDisplay}.</p>
+          <p>Orders and questions are handled on WhatsApp {whatsappDisplay}.</p>
           <p><a className="gold" href={`mailto:${BRAND.email}`}>{BRAND.email}</a></p>
-          <a className="btn glow" href={waLink('Hello Mithai Mixture, I would like to place an order.')} target="_blank" rel="noreferrer">Open WhatsApp</a>
+          <a className="btn glow" href={waLink('Hello Mithai Mixture, I would like to place an order.', whatsapp)} target="_blank" rel="noreferrer">Open WhatsApp</a>
         </div>
         <form className="form" onSubmit={onSubmit}>
           <label>Name<input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required /></label>

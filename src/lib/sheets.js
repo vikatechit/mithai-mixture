@@ -15,6 +15,14 @@ export async function fetchProducts(url) {
   return parse(res)
 }
 
+export async function fetchSettings(url) {
+  const u = new URL(url)
+  u.searchParams.set('action', 'settings')
+  u.searchParams.set('v', String(Date.now()))
+  const res = await fetch(u.toString())
+  return parse(res)
+}
+
 export async function fetchOrders(url, password) {
   const u = new URL(url)
   u.searchParams.set('action', 'orders')
