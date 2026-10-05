@@ -9,7 +9,7 @@ import { useStore } from '../context/Store'
 import { money } from '../lib/format'
 
 const slides = HERO_SLIDES.map(p => ({
-  image: p.fallback,
+  image: p.img,
   alt: p.name
 }))
 

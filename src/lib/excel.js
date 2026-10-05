@@ -14,7 +14,7 @@ function cell(value, type) {
 }
 
 export function downloadOrdersExcel(orders) {
-  const header = ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Note', 'Items', 'Subtotal']
+  const header = ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Note', 'Items', 'Subtotal', 'Status']
   const rows = orders.map(order => {
     const items = (order.items || [])
       .map(item => `${item.name} x ${item.qty} ${item.unit || ''}`.trim())
@@ -27,7 +27,8 @@ export function downloadOrdersExcel(orders) {
       order.address,
       order.note || '',
       items,
-      order.total ?? ''
+      order.total ?? '',
+      order.status || 'New'
     ]
   })
 

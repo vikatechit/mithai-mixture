@@ -1,9 +1,21 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { BRAND } from '../data/brand'
+import { BRAND, formatAddress } from '../data/brand'
 import { useStore } from '../context/Store'
 import { money, qtyLabel } from '../lib/format'
 import SmartImg from './SmartImg'
+
+function InstagramMark() {
+  return (
+    <span className="ig-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="14" height="14">
+        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="17.4" cy="6.6" r="1" fill="currentColor" />
+      </svg>
+    </span>
+  )
+}
 
 const LINKS = [
   ['/', 'Home'],
@@ -48,33 +60,65 @@ export default function Layout({ children }) {
       </header>
       <main>{children}</main>
       <footer className="footer">
+        <div className="footer-brand">
+          <img className="footer-logo" src={BRAND.logo} alt="Mithai Mixture logo" />
+          <p className="tagline-lg">{BRAND.tagline}</p>
+          <p className="footer-name">{BRAND.name}</p>
+          {store.social.instagram && (
+            <a className="shop-insta" href={store.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+              <InstagramMark />
+            </a>
+          )}
+        </div>
         <div className="footer-grid">
-          <div>
-            <img className="footer-logo" src={BRAND.logo} alt="" />
-            <p className="tagline-lg">{BRAND.tagline}</p>
-            <p>{BRAND.name}</p>
-          </div>
-          <div>
+          <div className="footer-col">
             <h3>Visit</h3>
             <Link to="/about">Our Story</Link>
             <Link to="/shop">Shop All</Link>
             <Link to="/rates">Sweet Rate List</Link>
             <Link to="/contact">Contact</Link>
           </div>
-          <div>
+          <div className="footer-col">
             <h3>Policies</h3>
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>
             <Link to="/shipping">Shipping</Link>
             <Link to="/refunds">Refunds</Link>
           </div>
-          <div>
+          {store.addresses.length > 0 && (
+            <div className="footer-col">
+              <h3>Visit us</h3>
+              {store.addresses.map(item => {
+                const formatted = formatAddress(item)
+                return (
+                  <address key={item.id} className="shop-address">
+                    {item.label && <strong>{item.label}</strong>}
+                    <span>{formatted.street}</span>
+                    <span>{formatted.place}</span>
+                  </address>
+                )
+              })}
+            </div>
+          )}
+          <div className="footer-col">
             <h3>Orders</h3>
             <a href={`https://wa.me/${store.whatsapp}`} target="_blank" rel="noreferrer">{store.whatsappDisplay}</a>
-            <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
+            {store.email && <a href={`mailto:${store.email}`}>{store.email}</a>}
           </div>
         </div>
-        <p className="fine">FSSAI licensed & hygienic preparation · © {new Date().getFullYear()} {BRAND.name}</p>
+        <div className="footer-bottom">
+          <p className="fine">FSSAI licensed & hygienic preparation · © {new Date().getFullYear()} {BRAND.name}</p>
+          <p className="dev-credit">
+            <span>Developed by <a href="https://www.instagram.com/vikatechit/" target="_blank" rel="noreferrer"><strong>Vikatech</strong></a></span>
+            <span className="dev-dot" aria-hidden="true">·</span>
+            <span>Mail: <a href="mailto:vikatechit@gmail.com">vikatechit@gmail.com</a></span>
+            <span className="dev-dot" aria-hidden="true">·</span>
+            <a className="dev-insta" href="https://www.instagram.com/vikatechit/" target="_blank" rel="noreferrer">
+              <InstagramMark />
+              Instagram
+            </a>
+          </p>
+        </div>
       </footer>
 
       <div className={`drawer-bg ${store.cartOpen ? 'show' : ''}`} onClick={() => store.setCartOpen(false)} />

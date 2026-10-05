@@ -8,7 +8,7 @@ const PAGES = {
       'Mithai Mixture India Private Limited collects the name, phone number, delivery address and order details you submit so we can prepare and deliver your order.',
       'Order and enquiry records are stored in your browser and, when connected, in the company’s private Google Sheet. We do not sell personal information.',
       'WhatsApp is used to confirm orders. Messages you send there are handled by WhatsApp under its own terms.',
-      'You may ask us to correct or delete an enquiry by writing to care@mithaimixture.com or on WhatsApp +91 81252 13332.'
+      'You may ask us to correct or delete an enquiry on the WhatsApp number shown on this website.'
     ]
   },
   terms: {

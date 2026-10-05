@@ -14,7 +14,20 @@ const K = {
   hash: 'mm_admin_hash_v5',
   script: 'mm_script_url_v5',
   enquiries: 'mm_enquiries_v5',
-  whatsapp: 'mm_whatsapp_v5'
+  whatsapp: 'mm_whatsapp_v5',
+  addresses: 'mm_addresses_v5',
+  social: 'mm_social_v5',
+  email: 'mm_email_v5'
+}
+
+function shopEmail(value) {
+  const email = String(value || '').trim()
+  return email.toLowerCase() === 'vikatechit@gmail.com' ? '' : email
+}
+
+function shopInstagram(value) {
+  const url = String(value || '').trim()
+  return /instagram\.com\/vikatechit\/?$/i.test(url) ? '' : url
 }
 
 function read(key, fallback) {
@@ -31,8 +44,38 @@ export async function sha256(text) {
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
+function productKey(name) {
+  const key = String(name || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ')
+  const aliases = {
+    'rost kalathihan': 'rost kalakand',
+    'rost kalakhand': 'rost kalakand',
+    'spl kolakand': 'spl kalakand',
+    'arusulu': 'ariselu',
+    'basan laddu': 'besan laddu',
+    'sooanpapdi': 'soanpapdi',
+    'soan papdi': 'soanpapdi',
+    'rasgulla pack': 'rasgulla',
+    'gulab jamun pack': 'gulab jamun',
+    'motichoor ladoo pack': 'motichoor ladoo',
+    'kaju katli pack': 'kaju katli',
+    'pista barfi pack': 'pista barfi',
+    'mithai badam 350ml': 'mithai badam milk',
+    'mithai badam': 'mithai badam milk',
+    'chocolate truffles': 'truffles',
+    'premium assorted chocolates': 'premium chocolate gift box'
+  }
+  return aliases[key] || key
+}
+
 function matchLocal(p) {
-  return CATALOG.find(c => c.id === p.id || c.name.toLowerCase() === String(p.name || '').toLowerCase())
+  const key = productKey(p.name)
+  if (!key) return null
+  return CATALOG.find(c => productKey(c.name) === key) || null
 }
 
 function sheetImage(src) {
@@ -65,6 +108,12 @@ export function StoreProvider({ children }) {
   const [orders, setOrders] = useState(() => read(K.orders, []))
   const [scriptUrl, setScriptUrlState] = useState(() => localStorage.getItem(K.script) || BRAND.scriptUrl)
   const [whatsapp, setWhatsappState] = useState(() => localStorage.getItem(K.whatsapp) || BRAND.whatsapp)
+  const [addresses, setAddresses] = useState(() => read(K.addresses, []))
+  const [social, setSocial] = useState(() => {
+    const saved = read(K.social, { instagram: BRAND.instagram, facebook: BRAND.facebook, youtube: BRAND.youtube })
+    return { ...saved, instagram: shopInstagram(saved.instagram) }
+  })
+  const [email, setEmail] = useState(() => shopEmail(localStorage.getItem(K.email) || BRAND.email))
   const [sheetProducts, setSheetProducts] = useState(null)
   const [sheetNote, setSheetNote] = useState('')
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('mm_admin_session_v5') === 'yes')
@@ -83,10 +132,28 @@ export function StoreProvider({ children }) {
     let cancel = false
     fetchSettings(scriptUrl)
       .then(data => {
-        if (cancel || !data?.ok || !data.whatsapp) return
-        const next = formatWhatsapp(data.whatsapp)
-        localStorage.setItem(K.whatsapp, next.whatsapp)
-        setWhatsappState(next.whatsapp)
+        if (cancel || !data?.ok) return
+        if (data.whatsapp) {
+          const next = formatWhatsapp(data.whatsapp)
+          localStorage.setItem(K.whatsapp, next.whatsapp)
+          setWhatsappState(next.whatsapp)
+        }
+        if (Array.isArray(data.addresses)) {
+          localStorage.setItem(K.addresses, JSON.stringify(data.addresses))
+          setAddresses(data.addresses)
+        }
+        const nextSocial = {
+          instagram: shopInstagram(data.instagram ?? BRAND.instagram),
+          facebook: data.facebook ?? '',
+          youtube: data.youtube ?? ''
+        }
+        localStorage.setItem(K.social, JSON.stringify(nextSocial))
+        setSocial(nextSocial)
+        if (data.email != null) {
+          const nextEmail = shopEmail(data.email || BRAND.email)
+          localStorage.setItem(K.email, nextEmail)
+          setEmail(nextEmail)
+        }
       })
       .catch(() => {})
     return () => { cancel = true }
@@ -195,7 +262,8 @@ export function StoreProvider({ children }) {
         lineTotal: line.lineTotal,
         cat: line.cat
       })),
-      total: subtotal
+      total: subtotal,
+      status: 'New'
     }
     setOrders(prev => [order, ...prev])
     clearCart()
@@ -228,6 +296,15 @@ export function StoreProvider({ children }) {
   }
 
   const passwordMatches = async (password) => {
+    if (scriptUrl) {
+      try {
+        const data = await fetchOrders(scriptUrl, password)
+        if (data?.ok) return true
+        if (data && data.ok === false) return false
+      } catch {
+        /* sheet unreachable, use this browser's saved password */
+      }
+    }
     const hash = await sha256(password)
     const saved = localStorage.getItem(K.hash)
     if (!saved) return hash === await sha256(BRAND.defaultPassword)
@@ -237,9 +314,7 @@ export function StoreProvider({ children }) {
   const login = async (password) => {
     const ok = await passwordMatches(password)
     if (!ok) return false
-    if (!localStorage.getItem(K.hash)) {
-      localStorage.setItem(K.hash, await sha256(BRAND.defaultPassword))
-    }
+    localStorage.setItem(K.hash, await sha256(password))
     sessionStorage.setItem('mm_admin_session_v5', 'yes')
     sessionStorage.setItem('mm_admin_pw', password)
     setAuthed(true)
@@ -255,16 +330,16 @@ export function StoreProvider({ children }) {
   const changePassword = async (current, next) => {
     if (!(await passwordMatches(current))) return { ok: false, error: 'Current password is incorrect.' }
     if (!next || next.length < 6) return { ok: false, error: 'Use at least 6 characters.' }
-    localStorage.setItem(K.hash, await sha256(next))
-    sessionStorage.setItem('mm_admin_pw', next)
     if (scriptUrl) {
       try {
         const data = await postAction(scriptUrl, 'password', { password: current, newPassword: next })
-        if (data && data.ok === false) return { ok: true, warning: 'Saved on this browser. Google Sheet rejected the change: ' + (data.error || 'unknown') }
+        if (!data?.ok) return { ok: false, error: data?.error || 'Google Sheet did not accept the new password.' }
       } catch {
-        return { ok: true, warning: 'Saved on this browser. Google Sheet could not be updated.' }
+        return { ok: false, error: 'Google Sheet could not be reached, so the password was not changed.' }
       }
     }
+    localStorage.setItem(K.hash, await sha256(next))
+    sessionStorage.setItem('mm_admin_pw', next)
     return { ok: true }
   }
 
@@ -282,25 +357,71 @@ export function StoreProvider({ children }) {
     const incoming = (data.orders || []).map(o => {
       let items = []
       try { items = typeof o.items === 'string' ? JSON.parse(o.items || '[]') : (o.items || []) } catch { items = [] }
-      return { ...o, items, total: Number(o.total || 0), note: o.note || '' }
-    })
-    setOrders(prev => {
-      const map = new Map(prev.map(o => [o.id, o]))
-      incoming.forEach(o => map.set(o.id, { ...map.get(o.id), ...o }))
-      return [...map.values()].sort((a, b) => String(b.date).localeCompare(String(a.date)))
-    })
+      return { ...o, items, total: Number(o.total || 0), note: o.note || '', status: o.status || 'New' }
+    }).sort((a, b) => String(b.date).localeCompare(String(a.date)))
+    setOrders(incoming)
     return { ok: true, count: incoming.length }
   }
 
   const updateStatus = async (orderId, status) => {
+    const previous = orders.find(o => o.id === orderId)?.status || 'New'
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o))
-    if (!scriptUrl) return
+    if (!scriptUrl) return { ok: true }
     const password = sessionStorage.getItem('mm_admin_pw') || ''
     try {
-      await postAction(scriptUrl, 'status', { password, orderId, status })
+      const data = await postAction(scriptUrl, 'status', { password, orderId, status })
+      if (!data?.ok) {
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: previous } : o))
+        return { ok: false, error: data?.error || 'Could not save the status.' }
+      }
     } catch {
-      showToast('Status saved on this browser. Sheet update failed.')
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: previous } : o))
+      return { ok: false, error: 'Could not reach Google Sheet.' }
     }
+    return { ok: true }
+  }
+
+  const deleteOrder = async (orderId) => {
+    if (!scriptUrl) return { ok: false, error: 'Google Sheet is not connected.' }
+    const password = sessionStorage.getItem('mm_admin_pw') || ''
+    try {
+      const data = await postAction(scriptUrl, 'deleteorder', { password, orderId })
+      if (!data?.ok) return { ok: false, error: data?.error || 'Could not delete that order.' }
+    } catch {
+      return { ok: false, error: 'Could not reach Google Sheet.' }
+    }
+    setOrders(prev => prev.filter(o => o.id !== orderId))
+    return { ok: true }
+  }
+
+  const saveShop = async (patch) => {
+    if (!scriptUrl) return { ok: false, error: 'Google Sheet is not connected.' }
+    const password = sessionStorage.getItem('mm_admin_pw') || ''
+    try {
+      const data = await postAction(scriptUrl, 'shop', { password, ...patch })
+      if (!data?.ok) return { ok: false, error: data?.error || 'Could not save those details.' }
+    } catch {
+      return { ok: false, error: 'Could not reach Google Sheet.' }
+    }
+    if (Array.isArray(patch.addresses)) {
+      localStorage.setItem(K.addresses, JSON.stringify(patch.addresses))
+      setAddresses(patch.addresses)
+    }
+    if (patch.email != null) {
+      const nextEmail = shopEmail(patch.email)
+      localStorage.setItem(K.email, nextEmail)
+      setEmail(nextEmail)
+    }
+    if (patch.instagram != null || patch.facebook != null || patch.youtube != null) {
+      const next = {
+        instagram: shopInstagram(patch.instagram ?? social.instagram),
+        facebook: patch.facebook ?? social.facebook,
+        youtube: patch.youtube ?? social.youtube
+      }
+      localStorage.setItem(K.social, JSON.stringify(next))
+      setSocial(next)
+    }
+    return { ok: true }
   }
 
   const addProduct = async (draft) => {
@@ -357,7 +478,8 @@ export function StoreProvider({ children }) {
     whatsapp: phone.whatsapp, whatsappDisplay: phone.whatsappDisplay, setWhatsapp,
     add, changeQty, remove, clearCart, placeOrder, saveEnquiry,
     orders, authed, login, logout, changePassword, passwordMatches,
-    syncOrders, updateStatus, addProduct
+    syncOrders, updateStatus, deleteOrder, addProduct,
+    addresses, social, email, saveShop
   }
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

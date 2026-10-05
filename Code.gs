@@ -6,7 +6,7 @@ function book() {
 
 const HEADERS = {
   Products: ['Product ID', 'Name', 'Category', 'Price', 'Unit', 'Pack Size', 'Image URL', 'Description', 'Available'],
-  Orders: ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Items JSON', 'Subtotal', 'Note'],
+  Orders: ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'Items JSON', 'Subtotal', 'Note', 'Status'],
   Customers: ['Phone', 'Name', 'Address', 'First Order', 'Last Order', 'Orders Count'],
   Enquiries: ['Enquiry ID', 'Date', 'Name', 'Phone', 'Message', 'Status'],
   Settings: ['Key', 'Value'],
@@ -102,10 +102,10 @@ function setup() {
     if (s.getLastRow() === 0) {
       s.getRange(1, 1, 1, HEADERS[n].length).setValues([HEADERS[n]]);
     } else if (n === 'Orders') {
-      var orderHeaders = s.getRange(1, 1, 1, Math.max(s.getLastColumn(), HEADERS.Orders.length)).getValues()[0].map(String);
-      if (orderHeaders.indexOf('Note') === -1) {
-        s.getRange(1, orderHeaders.length + 1).setValue('Note');
-      }
+      var orderHeaders = s.getRange(1, 1, 1, Math.max(s.getLastColumn(), 1)).getValues()[0].map(String);
+      if (orderHeaders.indexOf('Note') === -1) s.getRange(1, s.getLastColumn() + 1).setValue('Note');
+      orderHeaders = s.getRange(1, 1, 1, Math.max(s.getLastColumn(), 1)).getValues()[0].map(String);
+      if (orderHeaders.indexOf('Status') === -1) s.getRange(1, s.getLastColumn() + 1).setValue('Status');
     }
     s.setFrozenRows(1);
   });
@@ -121,6 +121,16 @@ function setup() {
     if (String(vals[k][0]) === 'WHATSAPP') hasPhone = true;
   }
   if (!hasPhone) settings.appendRow(['WHATSAPP', '918125213332']);
+  var fresh = settings.getDataRange().getValues();
+  ensureSetting(settings, fresh, 'CONTACT_EMAIL', '');
+  fresh = settings.getDataRange().getValues();
+  ensureSetting(settings, fresh, 'INSTAGRAM', '');
+  fresh = settings.getDataRange().getValues();
+  ensureSetting(settings, fresh, 'FACEBOOK', '');
+  fresh = settings.getDataRange().getValues();
+  ensureSetting(settings, fresh, 'YOUTUBE', '');
+  fresh = settings.getDataRange().getValues();
+  ensureSetting(settings, fresh, 'SHOP_ADDRESSES', '[]');
   const p = ss.getSheetByName('Products');
   if (p.getLastRow() <= 1) {
     p.getRange(2, 1, SEED.length, SEED[0].length).setValues(SEED);
@@ -150,6 +160,52 @@ function rememberCustomer(ss, customer) {
   sheet.appendRow([phone, customer.name || '', customer.address || '', now, now, 1]);
 }
 
+function ensureSetting(settings, rows, key, value) {
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === key) return;
+  }
+  settings.appendRow([key, value]);
+}
+
+function setSetting(settings, key, value) {
+  const rows = settings.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === key) {
+      settings.getRange(i + 1, 2).setValue(value);
+      return;
+    }
+  }
+  settings.appendRow([key, value]);
+}
+
+function readSettings() {
+  const rows = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Settings').getDataRange().getValues();
+  const out = {
+    whatsapp: '918125213332',
+    email: 'vikatechit@gmail.com',
+    instagram: 'https://www.instagram.com/vikatechit/',
+    facebook: '',
+    youtube: '',
+    addresses: []
+  };
+  var seen = {};
+  for (var n = 1; n < rows.length; n++) {
+    var key = String(rows[n][0] || '');
+    var val = rows[n][1] == null ? '' : String(rows[n][1]);
+    seen[key] = true;
+    if (key === 'WHATSAPP' && val) out.whatsapp = val.replace(/\D/g, '');
+    else if (key === 'CONTACT_EMAIL') out.email = val;
+    else if (key === 'INSTAGRAM') out.instagram = val;
+    else if (key === 'FACEBOOK') out.facebook = val;
+    else if (key === 'YOUTUBE') out.youtube = val;
+    else if (key === 'SHOP_ADDRESSES') {
+      try { out.addresses = val ? JSON.parse(val) : []; } catch (err) { out.addresses = []; }
+    }
+  }
+  out.configured = seen;
+  return out;
+}
+
 function json(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -159,13 +215,7 @@ function doGet(e) {
   const action = (e.parameter.action || '').toLowerCase();
   
   if (action === 'settings') {
-    const s = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Settings');
-    const rows = s.getDataRange().getValues();
-    var phone = '918125213332';
-    for (var n = 1; n < rows.length; n++) {
-      if (String(rows[n][0]) === 'WHATSAPP' && rows[n][1]) phone = String(rows[n][1]).replace(/\D/g, '');
-    }
-    return json({ ok: true, whatsapp: phone });
+    return json(Object.assign({ ok: true }, readSettings()));
   }
 
   if (action === 'orders') {
@@ -182,7 +232,8 @@ function doGet(e) {
         address: String(r[4] || ''),
         items: String(r[5] || '[]'),
         total: Number(r[6] || 0),
-        note: String(r[7] || '')
+        note: String(r[7] || ''),
+        status: String(r[8] || 'New')
       }))
     });
   }
@@ -233,7 +284,8 @@ function doPost(e) {
         payload.customer?.address || '',
         JSON.stringify(payload.items || []),
         Number(payload.total || 0),
-        payload.customer?.note || ''
+        payload.customer?.note || '',
+        'New'
       ]);
       rememberCustomer(ss, payload.customer);
       return json({ ok: true, order_id: orderId });
@@ -256,6 +308,36 @@ function doPost(e) {
     }
 
     if (action === 'status') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const orders = ss.getSheetByName('Orders');
+      const rows = orders.getDataRange().getValues();
+      for (var s = 1; s < rows.length; s++) {
+        if (String(rows[s][0]) === String(payload.orderId || '')) {
+          orders.getRange(s + 1, 9).setValue(payload.status || 'New');
+          return json({ ok: true });
+        }
+      }
+      return json({ ok: false, error: 'Order not found' });
+    }
+
+    if (action === 'deleteorder') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const orders = ss.getSheetByName('Orders');
+      const rows = orders.getDataRange().getValues();
+      for (var d = rows.length - 1; d >= 1; d--) {
+        if (String(rows[d][0]) === String(payload.orderId || '')) orders.deleteRow(d + 1);
+      }
+      return json({ ok: true });
+    }
+
+    if (action === 'shop') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const settings = ss.getSheetByName('Settings');
+      if (Array.isArray(payload.addresses)) setSetting(settings, 'SHOP_ADDRESSES', JSON.stringify(payload.addresses));
+      if (payload.email != null) setSetting(settings, 'CONTACT_EMAIL', String(payload.email || '').trim());
+      if (payload.instagram != null) setSetting(settings, 'INSTAGRAM', String(payload.instagram || '').trim());
+      if (payload.facebook != null) setSetting(settings, 'FACEBOOK', String(payload.facebook || '').trim());
+      if (payload.youtube != null) setSetting(settings, 'YOUTUBE', String(payload.youtube || '').trim());
       return json({ ok: true });
     }
 

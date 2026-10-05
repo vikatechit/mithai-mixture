@@ -1,15 +1,20 @@
 /** Deduped catalogue. Ghee-sweet repeats of the same names were removed. */
-const item = (id, name, price, cat, unit, img, file, desc, featured = false) => ({
-  id,
-  name,
-  price,
-  cat,
-  unit,
-  img,
-  fallback: `/assets/products/${file}.webp`,
-  desc,
-  featured
-})
+const item = (id, name, price, cat, unit, img, file, desc, featured = false) => {
+  const photo = /^https?:/i.test(img)
+    ? `/assets/products/${file}.jpg`
+    : `/assets/products/${file}.webp`
+  return {
+    id,
+    name,
+    price,
+    cat,
+    unit,
+    img: photo,
+    fallback: photo,
+    desc,
+    featured
+  }
+}
 
 export const CATALOG = [
   item('MM-001', 'Tripod Laddu', 480, 'Sweets', 'kg', 'https://i.pinimg.com/736x/c0/94/14/c094147e5d9522de87100b915b795115.jpg', 'tripod-laddu', 'Festive laddu made with ghee, cardamom and gram flour.', true),
@@ -40,9 +45,6 @@ export const CATALOG = [
   item('MM-026', 'Soanpapdi', 200, 'Sweets', 'kg', 'https://i.pinimg.com/736x/1e/23/c4/1e23c4acee5aefc930e70cb6898ff9d2.jpg', 'sooanpapdi', 'Flaky soan papdi with ghee and pistachio.'),
   item('MM-027', 'Gulab Jamun', 260, 'Sweets', 'kg', 'https://i.pinimg.com/736x/d7/57/aa/d757aaadf9cb57a72ee0143984c7338b.jpg', 'gulab-jamun', 'Khoya dumplings in rose and cardamom syrup.', true),
   item('MM-028', 'All Mixed Kova & Kalakanda Items', 460, 'Sweets', 'kg', 'https://i.pinimg.com/1200x/b6/78/01/b678019eca73bc41ef9fe17219211c32.jpg', 'mixed-kova-kalakanda', 'Celebration mix of kova and kalakand varieties.'),
-  item('MM-029', 'Chocolate Mysore Pak', null, 'Sweets', 'kg', '', 'milk-mysorepak', 'Ghee mysore pak with a cocoa finish. Rate confirmed on order.'),
-  item('MM-030', 'Badam Barfi', null, 'Sweets', 'kg', '', 'kaju-barfi', 'Almond barfi. Rate confirmed on order.'),
-  item('MM-031', 'Kala Jamun', null, 'Sweets', 'kg', '', 'hala-jamun', 'Dark fried dumplings in sugar syrup. Rate confirmed on order.'),
   item('MM-032', 'Rasgulla', null, 'Sweets', 'pack', 'https://i.pinimg.com/736x/31/fb/61/31fb61d23d041061c567d304d80b36b2.jpg', 'rasgulla-pack', 'Spongy chhena balls in light syrup, packed for gifting.'),
   item('MM-033', 'Motichoor Ladoo', null, 'Sweets', 'pack', 'https://i.pinimg.com/736x/12/e3/5a/12e35ad688e3e839b4d536535ea8bd5c.jpg', 'motichoor-ladoo-pack', 'Fine motichoor ladoos in a gift pack.'),
   item('MM-034', 'Kaju Katli', null, 'Sweets', 'pack', 'https://i.pinimg.com/736x/49/fb/ea/49fbea967f4ff2e347f5cdc3db76ff38.jpg', 'kaju-katli-pack', 'Diamond-cut kaju katli in a presentation box.'),

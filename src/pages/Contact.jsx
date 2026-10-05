@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Seo from '../components/Seo'
-import { BRAND, waLink } from '../data/brand'
+import { waLink, formatAddress } from '../data/brand'
 import { useStore } from '../context/Store'
 
 export default function Contact() {
-  const { saveEnquiry, whatsapp, whatsappDisplay } = useStore()
+  const { saveEnquiry, whatsapp, whatsappDisplay, email, addresses } = useStore()
   const [form, setForm] = useState({ name: '', phone: '', message: '' })
   const [done, setDone] = useState('')
 
@@ -24,7 +24,17 @@ export default function Contact() {
           <p className="kicker">Talk to us</p>
           <h1>Contact</h1>
           <p>Orders and questions are handled on WhatsApp {whatsappDisplay}.</p>
-          <p><a className="gold" href={`mailto:${BRAND.email}`}>{BRAND.email}</a></p>
+          {email && <p><a className="gold" href={`mailto:${email}`}>{email}</a></p>}
+          {addresses.map(item => {
+            const formatted = formatAddress(item)
+            return (
+              <address key={item.id} className="shop-address">
+                {item.label && <strong>{item.label}</strong>}
+                <span>{formatted.street}</span>
+                <span>{formatted.place}</span>
+              </address>
+            )
+          })}
           <a className="btn glow" href={waLink('Hello Mithai Mixture, I would like to place an order.', whatsapp)} target="_blank" rel="noreferrer">Open WhatsApp</a>
         </div>
         <form className="form" onSubmit={onSubmit}>

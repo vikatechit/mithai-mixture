@@ -7,7 +7,10 @@ export const BRAND = {
   scriptUrl: 'https://script.google.com/macros/s/AKfycbyNUuiuU2fVfmi3oi1mjFaXcS4cq1tlDUMLkiZ5ns9L26X14294849fHm-_xe9VQVtY/exec',
   whatsapp: '918125213332',
   whatsappDisplay: '+91 81252 13332',
-  email: 'care@mithaimixture.com',
+  email: '',
+  instagram: '',
+  facebook: '',
+  youtube: '',
   defaultPassword: 'Mithai@13332',
   logo: '/assets/logo.png'
 }
@@ -42,4 +45,20 @@ export function formatWhatsapp(input) {
 
 export function waLink(text, number = BRAND.whatsapp) {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`
+}
+
+export function cleanUrl(value) {
+  const v = String(value || '').trim()
+  if (!v) return ''
+  if (/^https?:\/\//i.test(v)) return v
+  return `https://${v}`
+}
+
+export function formatAddress(address) {
+  const street = [address.line1, address.line2].filter(Boolean).join(', ')
+  const place = [address.city, address.state].filter(Boolean).join(', ')
+  return {
+    street,
+    place: [place, address.pin].filter(Boolean).join(' ')
+  }
 }
