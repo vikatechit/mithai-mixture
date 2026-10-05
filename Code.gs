@@ -76,6 +76,19 @@ const SEED = [
   ["MM-066", "Paneer Tikka", "Frozen Foods", "", "pack", "", "assets/paneer-tikka.webp", "Chargrilled marinated cottage cheese cubes with bell peppers and roasted tandoori masala.", "YES"]
 ];
 
+function getAdminPassword() {
+  const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Settings');
+  const v = s.getDataRange().getValues();
+  for (var i = 1; i < v.length; i++) {
+    if (String(v[i][0]) === 'ADMIN_PASSWORD' && v[i][1]) return String(v[i][1]);
+  }
+  return 'Mithai@13332';
+}
+
+function passwordOk(value) {
+  return String(value || '') === getAdminPassword();
+}
+
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   Object.keys(HEADERS).forEach(n => {
@@ -85,6 +98,13 @@ function setup() {
     }
     s.setFrozenRows(1);
   });
+  const settings = ss.getSheetByName('Settings');
+  const vals = settings.getDataRange().getValues();
+  var hasPass = false;
+  for (var i = 1; i < vals.length; i++) {
+    if (String(vals[i][0]) === 'ADMIN_PASSWORD') hasPass = true;
+  }
+  if (!hasPass) settings.appendRow(['ADMIN_PASSWORD', 'Mithai@13332']);
   const p = ss.getSheetByName('Products');
   if (p.getLastRow() <= 1) {
     p.getRange(2, 1, SEED.length, SEED[0].length).setValues(SEED);
@@ -99,6 +119,25 @@ function doGet(e) {
   setup();
   const action = (e.parameter.action || '').toLowerCase();
   
+  if (action === 'orders') {
+    if (!passwordOk(e.parameter.password)) return json({ ok: false, error: 'Unauthorized' });
+    const o = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Orders');
+    const rows = o.getDataRange().getValues();
+    return json({
+      ok: true,
+      orders: rows.slice(1).filter(r => String(r[0] || '').trim()).map(r => ({
+        id: String(r[0]),
+        date: r[1] instanceof Date ? r[1].toISOString() : String(r[1] || ''),
+        name: String(r[2] || ''),
+        phone: String(r[3] || ''),
+        address: String(r[4] || ''),
+        items: String(r[5] || '[]'),
+        total: Number(r[6] || 0),
+        status: String(r[7] || 'Pending')
+      }))
+    });
+  }
+
   if (action === 'products') {
     const p = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Products');
     const v = p.getDataRange().getValues();
@@ -148,6 +187,49 @@ function doPost(e) {
         'Pending'
       ]);
       return json({ ok: true, order_id: orderId });
+    }
+
+    if (action === 'addproduct') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      ss.getSheetByName('Products').appendRow([
+        payload.id || ('MM-' + Date.now()),
+        payload.name || '',
+        payload.cat || 'Sweets',
+        payload.price == null ? '' : payload.price,
+        payload.unit || 'kg',
+        '',
+        payload.img || '',
+        payload.desc || '',
+        'YES'
+      ]);
+      return json({ ok: true });
+    }
+
+    if (action === 'status') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const sheet = ss.getSheetByName('Orders');
+      const rows = sheet.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]) === String(payload.orderId)) {
+          sheet.getRange(i + 1, 8).setValue(payload.status || 'Pending');
+          return json({ ok: true });
+        }
+      }
+      return json({ ok: false, error: 'Order not found' });
+    }
+
+    if (action === 'password') {
+      if (!passwordOk(payload.password)) return json({ ok: false, error: 'Unauthorized' });
+      const settings = ss.getSheetByName('Settings');
+      const rows = settings.getDataRange().getValues();
+      for (var j = 1; j < rows.length; j++) {
+        if (String(rows[j][0]) === 'ADMIN_PASSWORD') {
+          settings.getRange(j + 1, 2).setValue(payload.newPassword || '');
+          return json({ ok: true });
+        }
+      }
+      settings.appendRow(['ADMIN_PASSWORD', payload.newPassword || '']);
+      return json({ ok: true });
     }
 
     if (action === 'enquiry') {

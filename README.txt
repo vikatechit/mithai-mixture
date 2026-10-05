@@ -1,7 +1,20 @@
 MITHAI MIXTURE INDIA PRIVATE LIMITED
-Premium Production-Ready E-Commerce Website
-Brand Tagline: “Taste with Tradition”
+React website with admin dashboard
+Brand tagline: “Taste with Tradition”
 Official WhatsApp: +91 81252 13332
+
+The live site is the Vite + React app in this folder.
+Start it with: npm install && npm run dev
+Build it with: npm run build
+Admin: /admin
+Default password: Mithai@13332 (change it in Admin → Settings)
+Orders download as Excel only after the password is entered again.
+There is no Google Form. Data lives in the Google Sheet described in GOOGLE_SHEETS_SETUP.txt.
+The previous HTML pages are kept in legacy-static/.
+
+==================================================
+PREVIOUS STATIC SITE NOTES
+==================================================
 
 ==================================================
 PROJECT OVERVIEW & ARCHITECTURE

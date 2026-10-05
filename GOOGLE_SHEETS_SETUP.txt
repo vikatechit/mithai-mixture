@@ -32,3 +32,11 @@ If Google Sheets is ever offline or unconfigured:
 The website automatically falls back to the local catalogue and allows uninterrupted WhatsApp ordering.
 
 Deploy the complete folder directly to Vercel, Netlify, or GitHub Pages.
+The live site is the React app. Run `npm install` then `npm run build`. Vercel detects Vite.
+
+There is no Google Form. Open the Google Sheet you created. The tabs are:
+Products (items, prices, images), Orders (orders and status), Customers, Enquiries, Settings, Categories.
+Admin dashboard: /admin
+Default password: Mithai@13332 — change it in Admin → Settings after the first login.
+Excel download of orders asks for that password again.
+New items added in Admin appear on the website immediately in that browser, and are appended to the Products tab when the Apps Script URL is saved.
