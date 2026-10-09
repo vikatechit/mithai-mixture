@@ -56,7 +56,7 @@ export default function Admin() {
     store.syncOrders().then(result => {
       if (cancel || !result.ok) return
       setNotice(`Loaded ${result.count} orders from the Google Sheet.`)
-    })
+    }).catch(() => {})
     return () => { cancel = true }
   }, [store.authed])
 
@@ -121,7 +121,7 @@ export default function Admin() {
         <form className="form" onSubmit={login}>
           <PasswordField label="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" />
           {error && <p className="err">{error}</p>}
-          <button className="btn glow" type="submit" disabled={busy}>{busy ? 'Checking…' : 'Enter dashboard'}</button>
+          <button className="btn glow" type="submit" disabled={busy}>{busy ? 'Opening…' : 'Enter dashboard'}</button>
         </form>
       </section>
     )
@@ -276,7 +276,7 @@ export default function Admin() {
           }}>
             <h2>Contact email</h2>
             <label>Email
-              <input type="email" value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder="Add when the shop email is ready" />
+              <input type="email" value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder="Mithaimixtureindia@gmail.com" />
             </label>
             <button className="btn glow" type="submit">Save email</button>
           </form>
@@ -337,8 +337,8 @@ export default function Admin() {
             })
           }}>
             <h2>Social profiles</h2>
-            <p className="muted">Add these when the shop profiles are ready. The footer shows only the Instagram icon.</p>
-            <label>Instagram<input value={socialForm.instagram} onChange={e => setSocialForm({ ...socialForm, instagram: e.target.value })} placeholder="https://www.instagram.com/…" /></label>
+            <p className="muted">The shop Instagram QR opens this profile. Facebook and YouTube stay hidden until you add a link.</p>
+            <label>Instagram<input value={socialForm.instagram} onChange={e => setSocialForm({ ...socialForm, instagram: e.target.value })} placeholder="https://www.instagram.com/mithaimixtureindia/" /></label>
             <label>Facebook<input value={socialForm.facebook} onChange={e => setSocialForm({ ...socialForm, facebook: e.target.value })} placeholder="https://www.facebook.com/…" /></label>
             <label>YouTube<input value={socialForm.youtube} onChange={e => setSocialForm({ ...socialForm, youtube: e.target.value })} placeholder="https://www.youtube.com/…" /></label>
             <button className="btn glow" type="submit">Save social links</button>

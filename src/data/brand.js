@@ -7,8 +7,9 @@ export const BRAND = {
   scriptUrl: 'https://script.google.com/macros/s/AKfycbyNUuiuU2fVfmi3oi1mjFaXcS4cq1tlDUMLkiZ5ns9L26X14294849fHm-_xe9VQVtY/exec',
   whatsapp: '918125213332',
   whatsappDisplay: '+91 81252 13332',
-  email: '',
-  instagram: '',
+  email: 'Mithaimixtureindia@gmail.com',
+  instagram: 'https://www.instagram.com/mithaimixtureindia/',
+  qr: '/assets/instagram-qr.jpg',
   facebook: '',
   youtube: '',
   defaultPassword: 'Mithai@13332',
@@ -52,6 +53,16 @@ export function cleanUrl(value) {
   if (!v) return ''
   if (/^https?:\/\//i.test(v)) return v
   return `https://${v}`
+}
+
+export const SHOP_ADDRESS = {
+  id: 'shop-vizag',
+  label: 'Mithai Mixture India Pvt Ltd',
+  line1: 'AP H.B Colony, HIG 1, opposite Sri Vasavi Kanyaka Parameswari Temple and Puri Jagannath Swamy Temple',
+  line2: 'Peda Gantyada, Gajuwaka',
+  city: 'Visakhapatnam',
+  state: 'Andhra Pradesh',
+  pin: '530044'
 }
 
 export function formatAddress(address) {

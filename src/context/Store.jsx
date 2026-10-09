@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { CATALOG } from '../data/catalog'
-import { BRAND, formatWhatsapp } from '../data/brand'
-import { fetchOrders, fetchProducts, fetchSettings, postAction } from '../lib/sheets'
+import { BRAND, SHOP_ADDRESS, formatWhatsapp } from '../data/brand'
+import { shopPriceFor } from '../data/priceList'
+import { checkPassword, fetchOrders, fetchProducts, fetchSettings, postAction } from '../lib/sheets'
 import { orderStamp, stepFor } from '../lib/format'
 
 const StoreContext = createContext(null)
@@ -22,12 +23,14 @@ const K = {
 
 function shopEmail(value) {
   const email = String(value || '').trim()
-  return email.toLowerCase() === 'vikatechit@gmail.com' ? '' : email
+  if (!email || email.toLowerCase() === 'vikatechit@gmail.com') return BRAND.email
+  return email
 }
 
 function shopInstagram(value) {
   const url = String(value || '').trim()
-  return /instagram\.com\/vikatechit\/?$/i.test(url) ? '' : url
+  if (!url || /instagram\.com\/vikatechit\/?$/i.test(url)) return BRAND.instagram
+  return url
 }
 
 function read(key, fallback) {
@@ -84,10 +87,22 @@ function sheetImage(src) {
   return `/${String(src).replace(/^\.?\//, '')}`
 }
 
+function pricedProduct(p) {
+  const listed = shopPriceFor(p.name)
+  if (!listed) return p
+  return {
+    ...p,
+    price: listed.price,
+    unit: listed.unit === 'pc' ? (p.unit || 'pc') : (p.unit || listed.unit)
+  }
+}
+
 function normalizeSheetProduct(p) {
   const local = matchLocal(p)
-  const price = p.price === '' || p.price == null || Number.isNaN(Number(p.price)) ? (local?.price ?? null) : Number(p.price)
-  return {
+  const listed = shopPriceFor(p.name) || (local ? shopPriceFor(local.name) : null)
+  const sheetPrice = p.price === '' || p.price == null || Number.isNaN(Number(p.price)) ? null : Number(p.price)
+  const price = listed?.price ?? local?.price ?? sheetPrice
+  return pricedProduct({
     id: p.id || local?.id || `MM-${Date.now()}`,
     name: p.name,
     price,
@@ -98,7 +113,7 @@ function normalizeSheetProduct(p) {
     desc: p.desc || local?.desc || 'Handcrafted Mithai Mixture speciality.',
     featured: local?.featured || false,
     available: p.available || 'YES'
-  }
+  })
 }
 
 export function StoreProvider({ children }) {
@@ -108,7 +123,10 @@ export function StoreProvider({ children }) {
   const [orders, setOrders] = useState(() => read(K.orders, []))
   const [scriptUrl, setScriptUrlState] = useState(() => localStorage.getItem(K.script) || BRAND.scriptUrl)
   const [whatsapp, setWhatsappState] = useState(() => localStorage.getItem(K.whatsapp) || BRAND.whatsapp)
-  const [addresses, setAddresses] = useState(() => read(K.addresses, []))
+  const [addresses, setAddresses] = useState(() => {
+    const saved = read(K.addresses, [])
+    return saved.length ? saved : [SHOP_ADDRESS]
+  })
   const [social, setSocial] = useState(() => {
     const saved = read(K.social, { instagram: BRAND.instagram, facebook: BRAND.facebook, youtube: BRAND.youtube })
     return { ...saved, instagram: shopInstagram(saved.instagram) }
@@ -139,8 +157,9 @@ export function StoreProvider({ children }) {
           setWhatsappState(next.whatsapp)
         }
         if (Array.isArray(data.addresses)) {
-          localStorage.setItem(K.addresses, JSON.stringify(data.addresses))
-          setAddresses(data.addresses)
+          const nextAddresses = data.addresses.length ? data.addresses : [SHOP_ADDRESS]
+          localStorage.setItem(K.addresses, JSON.stringify(nextAddresses))
+          setAddresses(nextAddresses)
         }
         const nextSocial = {
           instagram: shopInstagram(data.instagram ?? BRAND.instagram),
@@ -160,7 +179,7 @@ export function StoreProvider({ children }) {
   }, [scriptUrl])
 
   const products = useMemo(() => {
-    const base = (sheetProducts?.length ? sheetProducts : CATALOG).map(p => ({ ...p }))
+    const base = (sheetProducts?.length ? sheetProducts : CATALOG).map(p => pricedProduct({ ...p }))
     const ids = new Set(base.map(p => p.id))
     const names = new Set(base.map(p => p.name.toLowerCase()))
     custom.forEach(p => {
@@ -295,20 +314,27 @@ export function StoreProvider({ children }) {
     return row
   }
 
-  const passwordMatches = async (password) => {
-    if (scriptUrl) {
-      try {
-        const data = await fetchOrders(scriptUrl, password)
-        if (data?.ok) return true
-        if (data && data.ok === false) return false
-      } catch {
-        /* sheet unreachable, use this browser's saved password */
-      }
-    }
+  const localPasswordOk = async (password) => {
     const hash = await sha256(password)
     const saved = localStorage.getItem(K.hash)
     if (!saved) return hash === await sha256(BRAND.defaultPassword)
     return hash === saved
+  }
+
+  const passwordMatches = async (password) => {
+    if (await localPasswordOk(password)) return true
+    if (!scriptUrl) return false
+    try {
+      const data = await checkPassword(scriptUrl, password)
+      if (data?.ok === false && /unauthor/i.test(String(data.error || ''))) return false
+      if (data?.ok) return true
+      const orders = await fetchOrders(scriptUrl, password)
+      if (orders?.ok) return true
+      if (orders && orders.ok === false) return false
+    } catch {
+      /* sheet unreachable, only the saved local password can unlock this browser */
+    }
+    return false
   }
 
   const login = async (password) => {

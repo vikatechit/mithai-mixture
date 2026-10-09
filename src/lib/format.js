@@ -14,7 +14,8 @@ export function qtyLabel(qty, unit) {
     pack: 'packs',
     jar: 'jars',
     bottle: 'bottles',
-    box: 'boxes'
+    box: 'boxes',
+    pc: 'pcs'
   }
   return `${q} ${q > 1 ? (plural[unit] || unit) : unit}`
 }

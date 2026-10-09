@@ -122,9 +122,9 @@ function setup() {
   }
   if (!hasPhone) settings.appendRow(['WHATSAPP', '918125213332']);
   var fresh = settings.getDataRange().getValues();
-  ensureSetting(settings, fresh, 'CONTACT_EMAIL', '');
+  ensureSetting(settings, fresh, 'CONTACT_EMAIL', 'Mithaimixtureindia@gmail.com');
   fresh = settings.getDataRange().getValues();
-  ensureSetting(settings, fresh, 'INSTAGRAM', '');
+  ensureSetting(settings, fresh, 'INSTAGRAM', 'https://www.instagram.com/mithaimixtureindia/');
   fresh = settings.getDataRange().getValues();
   ensureSetting(settings, fresh, 'FACEBOOK', '');
   fresh = settings.getDataRange().getValues();
@@ -214,6 +214,11 @@ function doGet(e) {
   setup();
   const action = (e.parameter.action || '').toLowerCase();
   
+  if (action === 'login') {
+    if (!passwordOk(e.parameter.password)) return json({ ok: false, error: 'Unauthorized' });
+    return json({ ok: true });
+  }
+
   if (action === 'settings') {
     return json(Object.assign({ ok: true }, readSettings()));
   }

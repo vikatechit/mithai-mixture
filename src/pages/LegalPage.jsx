@@ -8,14 +8,14 @@ const PAGES = {
       'Mithai Mixture India Private Limited collects the name, phone number, delivery address and order details you submit so we can prepare and deliver your order.',
       'Order and enquiry records are stored in your browser and, when connected, in the company’s private Google Sheet. We do not sell personal information.',
       'WhatsApp is used to confirm orders. Messages you send there are handled by WhatsApp under its own terms.',
-      'You may ask us to correct or delete an enquiry on the WhatsApp number shown on this website.'
+      'You may ask us to correct or delete an enquiry by writing to Mithaimixtureindia@gmail.com or on the WhatsApp number shown on this website.'
     ]
   },
   terms: {
     title: 'Terms & Conditions',
     body: [
       'The website is operated by Mithai Mixture India Private Limited. Product photographs show the style of each item. Handmade sweets can vary slightly in colour and finish.',
-      'Rates printed per kilogram apply to the sweet rate list. Items marked “price on request” are confirmed before packing. GST is charged as applicable.',
+      'The published rate list is the current price for each named item. Piece, jar and box items are charged per unit. GST is charged as applicable.',
       'An order is accepted when we confirm it on WhatsApp. Weight for sweets moves in steps of 0.25 kg. Pack, jar, bottle and box items move in whole units.',
       'Please check the item list and address before you submit. Festival dates can change preparation time, which we will tell you at confirmation.'
     ]

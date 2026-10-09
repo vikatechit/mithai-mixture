@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BRAND, formatAddress } from '../data/brand'
 import { useStore } from '../context/Store'
 import { money, qtyLabel } from '../lib/format'
@@ -17,18 +17,41 @@ function InstagramMark() {
   )
 }
 
-const LINKS = [
-  ['/', 'Home'],
-  ['/categories', 'Categories'],
-  ['/shop', 'Shop'],
-  ['/rates', 'Rate List'],
-  ['/about', 'About'],
-  ['/contact', 'Contact']
+const MENU = [
+  {
+    id: 'shop',
+    label: 'Shop',
+    links: [
+      ['/', 'Home'],
+      ['/categories', 'Categories'],
+      ['/shop', 'Shop'],
+      ['/rates', 'Rate List']
+    ]
+  },
+  {
+    id: 'company',
+    label: 'Company',
+    links: [
+      ['/about', 'About'],
+      ['/contact', 'Contact'],
+      ['/order', 'Checkout']
+    ]
+  },
+  {
+    id: 'help',
+    label: 'Help',
+    links: [
+      ['/privacy', 'Privacy'],
+      ['/terms', 'Terms'],
+      ['/shipping', 'Shipping'],
+      ['/refunds', 'Refunds']
+    ]
+  }
 ]
 
 export default function Layout({ children }) {
   const store = useStore()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState('')
 
   return (
     <>
@@ -38,19 +61,30 @@ export default function Layout({ children }) {
       </div>
       <header className="header">
         <div className="nav-wrap">
-          <Link to="/" className="brand" aria-label="Mithai Mixture home">
+          <Link to="/" className="brand" aria-label="Mithai Mixture home" onClick={() => setOpen('')}>
             <img src={BRAND.logo} alt="Mithai Mixture logo" />
             <span>
               <strong>Mithai Mixture</strong>
               <em>{BRAND.sub}</em>
             </span>
           </Link>
-          <button type="button" className="menu-btn glow" aria-label="Menu" onClick={() => setOpen(v => !v)}>
-            {open ? 'Close' : 'Menu'}
-          </button>
-          <nav className={open ? 'open' : ''}>
-            {LINKS.map(([to, label]) => (
-              <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)}>{label}</NavLink>
+          <nav className="bar-nav" aria-label="Site">
+            {MENU.map(group => (
+              <div key={group.id} className={`bar-group ${open === group.id ? 'open' : ''}`}>
+                <button
+                  type="button"
+                  className="bar-btn"
+                  aria-expanded={open === group.id}
+                  onClick={() => setOpen(v => v === group.id ? '' : group.id)}
+                >
+                  {group.label}
+                </button>
+                <div className="bar-panel">
+                  {group.links.map(([to, label]) => (
+                    <Link key={to} to={to} onClick={() => setOpen('')}>{label}</Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
           <button type="button" className="cart-btn glow" onClick={() => store.setCartOpen(true)}>
@@ -65,8 +99,9 @@ export default function Layout({ children }) {
           <p className="tagline-lg">{BRAND.tagline}</p>
           <p className="footer-name">{BRAND.name}</p>
           {store.social.instagram && (
-            <a className="shop-insta" href={store.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
-              <InstagramMark />
+            <a className="shop-qr" href={store.social.instagram} target="_blank" rel="noreferrer">
+              <img src={BRAND.qr} alt="Scan to open @mithaimixtureindia on Instagram" />
+              <span>@mithaimixtureindia</span>
             </a>
           )}
         </div>
@@ -75,7 +110,7 @@ export default function Layout({ children }) {
             <h3>Visit</h3>
             <Link to="/about">Our Story</Link>
             <Link to="/shop">Shop All</Link>
-            <Link to="/rates">Sweet Rate List</Link>
+            <Link to="/rates">Rate List</Link>
             <Link to="/contact">Contact</Link>
           </div>
           <div className="footer-col">

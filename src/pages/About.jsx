@@ -24,7 +24,7 @@ export default function About() {
         {[
           ['Purity', 'Ghee, milk, nuts and spices chosen for flavour, not for show.'],
           ['Craft', 'Laddus, barfis, mixtures and pickles finished in small batches.'],
-          ['Clarity', 'The sweet rate list is published per kilogram. Other rates are confirmed before packing.'],
+          ['Clarity', 'The official rate list is published by item name and PLU. Shop prices follow that list.'],
           ['Care', 'Orders are checked on WhatsApp so weight, pack size and delivery stay accurate.']
         ].map(([t, d]) => (
           <article key={t} className="promise"><h3>{t}</h3><p>{d}</p></article>

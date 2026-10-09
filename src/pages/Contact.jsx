@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import Seo from '../components/Seo'
-import { waLink, formatAddress } from '../data/brand'
+import { BRAND, waLink, formatAddress } from '../data/brand'
 import { useStore } from '../context/Store'
 
 export default function Contact() {
-  const { saveEnquiry, whatsapp, whatsappDisplay, email, addresses } = useStore()
+  const store = useStore()
+  const { saveEnquiry, whatsapp, whatsappDisplay, email, addresses } = store
   const [form, setForm] = useState({ name: '', phone: '', message: '' })
   const [done, setDone] = useState('')
 
@@ -25,6 +26,12 @@ export default function Contact() {
           <h1>Contact</h1>
           <p>Orders and questions are handled on WhatsApp {whatsappDisplay}.</p>
           {email && <p><a className="gold" href={`mailto:${email}`}>{email}</a></p>}
+          {store.social?.instagram && (
+            <a className="shop-qr contact-qr" href={store.social.instagram} target="_blank" rel="noreferrer">
+              <img src={BRAND.qr} alt="Scan to open @mithaimixtureindia on Instagram" />
+              <span>Scan for Instagram · @mithaimixtureindia</span>
+            </a>
+          )}
           {addresses.map(item => {
             const formatted = formatAddress(item)
             return (

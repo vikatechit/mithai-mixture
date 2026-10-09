@@ -32,6 +32,21 @@ export async function fetchOrders(url, password) {
   return parse(res)
 }
 
+export async function checkPassword(url, password) {
+  const u = new URL(url)
+  u.searchParams.set('action', 'login')
+  u.searchParams.set('password', password)
+  u.searchParams.set('v', String(Date.now()))
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), 2500)
+  try {
+    const res = await fetch(u.toString(), { signal: ctrl.signal })
+    return parse(res)
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 export async function postAction(url, action, payload) {
   const body = new URLSearchParams()
   body.set('action', action)
